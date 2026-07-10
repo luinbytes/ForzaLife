@@ -1,3 +1,5 @@
+<img width="443" height="254" alt="LogoYuna" src="https://github.com/user-attachments/assets/60491faf-f06f-47e9-9ab3-c8a490efe5fd" />
+
 # ForzaLife
 Safe add-on for Forza Horizon 6 adding fuel usage, periodic oil maintenance, boost gauge and more.
 
@@ -9,6 +11,17 @@ Any feedback is appreciated. If you see bugs, bad translations and any other iss
 Remeber - it's a beta. I has bugs for sure. But together we can squiah them!
 
 If you feel generous you can buy me a beer - https://buymeacoffee.com/puffinflight
+
+## What it does?
+ForzaLife currently adds these features:
+* **Fuel consumption** for all cars with HUD gauge and **fuel starvation simulation**.
+* Ability to **fill up** at fuel stations.
+* **Oil maintenance** and car workshops to provide them.
+* **Odometer** for every car.
+* **Boost gauge** for turbo and supercharged vehicles.
+* **Simple navigation** to the nearest gas station or workshop.
+* Vehicle info card where you can check next oil maintenance or current session travel distance.
+* Many settings to fit your style of play.
 
 ## How to use?
 
