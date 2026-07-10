@@ -6,6 +6,25 @@ Safe add-on for Forza Horizon 6 adding fuel usage, periodic oil maintenance, boo
 Welcome to ForzaLife, an add-on for Forza Horizon 6. The goal is to add some features and scenarios to the game in a safe and non-invasive manner. I use only official telemetry data and don't read or write to any files or memory of the game. The only thing I input in the game is simulating fuel starvation by simulating brake key presses. As it is used only outside of races and in no way can give you an advantage, it complies with the Forza Code of Conduct.
 
 Any feedback is appreciated. If you see bugs, bad translations and any other issues, please report them to me.
+Remeber - it's a beta. I has bugs for sure. But together we can squiah them!
+
+If you feel generous you can buy me a beer - https://buymeacoffee.com/puffinflight
+
+## How to use?
+
+* Unpack the add-on and run ForzaLife.exe.
+* In Forza go to Settings > HUD & Gameplay, scroll all the way down. Switch on "Data Out".
+* Go into the setting of the add-on by double or right clicking on the pink H icon in tray. 
+* Set telemetry port to the same port you have in Forza "Data Out IP Port"
+* Set brake pedal key the same as your key in Forza (Settings > Controls > Change Input Mapping > Keyboard)
+* In game you can invoke forzaLife menu by clicking main interaction key (default: L) and navigate up and down (default semicolon and quote keys)
+
+
+## FAQ
+* **Why fuel gauge and odometer in my car doesn't show the same thing as add-on HUD is?**
+  Because for an add-on to be safe, it cannot modify forza memory or files. Forza doesn't allow ANY data input into the game.
+* **One of gas station atendants is rude! **
+  It's Reina. We tried. She's just an a-hole.
 
 ## Legal Stuff
 
@@ -30,3 +49,10 @@ The official "Forza", "Forza Horizon", and "Forza Motorsport" names, as well as 
 * Add-on was not tested on ultrawide monitors yet. Report if you have any issues, preferably with a screenshot.
 * If the fuel gauge is not visible please report with a screenshot, resolution of your screen AND resolution set in the game.
 * Currently fuel use is active in the eliminator and hide and seek modes. I'm working on detecting them, but it's tricky. The data from telemetry in case of race status is not reliable at all.
+
+## AI Disclaimer
+
+The ForzaLife add-on was not vibe-coded. AI was use to generate character illustrations. If you're against AI use you can remove those from the assets folder. The add-on should still work.
+
+## Assets used
+* CC0 sounds from freesound.org by BigDino1995, collierhs_colinlib, sevenbsb, XiiiSamples
