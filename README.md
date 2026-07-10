@@ -21,9 +21,14 @@ If you feel generous you can buy me a beer - https://buymeacoffee.com/puffinflig
 
 
 ## FAQ
-* **Why fuel gauge and odometer in my car doesn't show the same thing as add-on HUD is?**
-  Because for an add-on to be safe, it cannot modify forza memory or files. Forza doesn't allow ANY data input into the game.
-* **One of gas station atendants is rude! **
+
+* **Why don't the fuel gauge and odometer in my car show the same thing as the add-on HUD?**
+  Because for an add-on to be safe, it cannot modify Forza's memory or files. Forza does not allow ANY data input into the game.
+* **I have two lovely Nissan Figaros, but the odometer and fuel level are the same for both.**
+  Unfortunately, I cannot tell the difference between cars of the same model using data from Forza. I am still trying to figure out how to fix this.
+* **Why don't you just use the fuel level from telemetry?**
+  It only works with the damage simulation switched on, and in Forza Horizon, that is just annoying. The same goes for tire wear. Most players prefer to play with no damage or visual damage only, and these options keep the fuel always at 100%.
+* **One of the gas station attendants is rude!**
   It's Reina. We tried. She's just an a-hole.
 
 ## Legal Stuff
