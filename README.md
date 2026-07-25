@@ -3,6 +3,28 @@
 # ForzaLife
 Safe add-on for Forza Horizon 6 adding fuel usage, periodic oil maintenance, boost gauge and more.
 
+## Linux companion
+
+This fork adds an independently authored Rust companion under [`linux/`](linux/). It listens only to the official FH6 Data Out UDP feed and renders a transparent, click-through HUD inside gamescope. The proprietary Windows release and its instructions below remain unchanged and are not bundled with or relicensed by the Linux code.
+
+Build and install:
+
+```sh
+cd linux
+cargo build --release --locked
+install -Dm755 target/release/forzalife ~/.local/bin/forzalife
+```
+
+Put the session wrapper inside gamescope in the game's Steam launch options. For example:
+
+```sh
+gamescope -f -r 144 -w 1920 -h 1080 -- ~/.local/bin/forzalife session %command%
+```
+
+Then enable Data Out in FH6 with IP `127.0.0.1` and port `8080`. Set another port by placing `FORZALIFE_PORT=9000` before `gamescope`.
+
+The current Linux HUD shows live speed, RPM, boost, gear, persistent per-car fuel, odometer and oil state, a service map, packet count, and connection state. Press `L` to register gas stations and workshops at the current telemetry position; stopping within 25 m refuels or services the current car. It does not inject into, read memory from, or modify FH6. See [`linux/CLEAN_ROOM.md`](linux/CLEAN_ROOM.md) for the source boundary and [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for the implementation evidence.
+
 ## Hello
 
 Welcome to ForzaLife, an add-on for Forza Horizon 6. The goal is to add some features and scenarios to the game in a safe and non-invasive manner. I use only official telemetry data and don't read or write to any files or memory of the game. The only thing I input in the game is simulating fuel starvation by simulating brake key presses. As it is used only outside of races and in no way can give you an advantage, it complies with the Forza Code of Conduct.

@@ -1,0 +1,58 @@
+use forzalife::{
+    model::{DEFAULT_TANK_LITERS, OIL_INTERVAL_METERS, Simulation},
+    telemetry::Telemetry,
+};
+
+fn telemetry(timestamp_ms: u32, distance_m: f32, power_w: f32) -> Telemetry {
+    Telemetry {
+        race_on: false,
+        timestamp_ms,
+        engine_max_rpm: 8_000.0,
+        engine_idle_rpm: 900.0,
+        current_engine_rpm: 4_000.0,
+        yaw: 0.0,
+        power_w,
+        throttle: 200,
+        car_ordinal: 42,
+        position: [0.0; 3],
+        speed_mps: 30.0,
+        boost_psi: 5.0,
+        fuel: 1.0,
+        distance_m,
+        gear: 4,
+    }
+}
+
+#[test]
+fn driving_consumes_fuel_and_advances_per_car_maintenance() {
+    let mut simulation = Simulation::default();
+    simulation.update(&telemetry(1_000, 100.0, 80_000.0));
+    let life = simulation.update(&telemetry(2_000, 130.0, 80_000.0));
+
+    assert!(life.fuel_liters < DEFAULT_TANK_LITERS);
+    assert_eq!(life.odometer_m, 30.0);
+    assert_eq!(life.oil_remaining_m, OIL_INTERVAL_METERS - 30.0);
+}
+
+#[test]
+fn implausible_distance_resets_do_not_inflate_the_odometer() {
+    let mut simulation = Simulation::default();
+    simulation.update(&telemetry(1_000, 10_000.0, 0.0));
+    let life = simulation.update(&telemetry(2_000, 5.0, 0.0));
+
+    assert_eq!(life.odometer_m, 0.0);
+}
+
+#[test]
+fn each_car_keeps_independent_life_state() {
+    let mut simulation = Simulation::default();
+    simulation.update(&telemetry(1_000, 0.0, 100_000.0));
+    let car_42 = simulation.update(&telemetry(2_000, 100.0, 100_000.0));
+
+    let mut other = telemetry(3_000, 500.0, 0.0);
+    other.car_ordinal = 99;
+    let car_99 = simulation.update(&other);
+
+    assert!(car_42.fuel_liters < car_99.fuel_liters);
+    assert_eq!(car_99.odometer_m, 0.0);
+}
