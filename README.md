@@ -23,7 +23,7 @@ gamescope -f -r 144 -w 1920 -h 1080 -- ~/.local/bin/forzalife session %command%
 
 Then enable Data Out in FH6 with IP `127.0.0.1` and port `8080`. Set another port by placing `FORZALIFE_PORT=9000` before `gamescope`.
 
-The Linux HUD shows live speed and boost, persistent per-car fuel, odometer and oil state, plus service navigation. Press `L` to open the service-location menu; stopping within 25 m of a saved location refuels or services the current car. It does not read memory from or modify FH6. See [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for Linux overlay setup notes.
+The Linux HUD shows live speed and boost, persistent per-car fuel, odometer and oil state, plus service navigation using the Windows release's bundled world map. Press `L` to open or execute the selected menu option, `'` to move up, and `;` to move down. The menu includes mini navigation, the vehicle info card, and per-car fuel-usage pause. Stopping within 25 m of a gas station or workshop refuels or services the current car. It does not read memory from or modify FH6. See [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for Linux overlay setup notes.
 
 ## Hello
 
@@ -42,7 +42,7 @@ ForzaLife currently adds these features:
 * **Odometer** for every car.
 * **Boost gauge** for turbo and supercharged vehicles.
 * **Simple navigation** to the nearest gas station or workshop.
-* Vehicle info card where you can check next oil maintenance or current session travel distance.
+* Vehicle info card where you can check next oil maintenance or the persistent trip odometer.
 * Many settings to fit your style of play.
 
 ## How to use?

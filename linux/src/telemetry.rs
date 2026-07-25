@@ -11,6 +11,7 @@ pub struct Telemetry {
     pub power_w: f32,
     pub throttle: u8,
     pub car_ordinal: i32,
+    pub num_cylinders: i32,
     pub position: [f32; 3],
     pub speed_mps: f32,
     pub boost_psi: f32,
@@ -41,6 +42,7 @@ pub fn parse(packet: &[u8]) -> Result<Telemetry, ParseError> {
         power_w: f32_at(packet, 260),
         throttle: packet[315],
         car_ordinal: i32_at(packet, 212),
+        num_cylinders: i32_at(packet, 228),
         position: [
             f32_at(packet, 244),
             f32_at(packet, 248),

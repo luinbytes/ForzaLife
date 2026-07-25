@@ -10,6 +10,9 @@ ForzaLife adds persistent vehicle-life simulation around Forza telemetry. This f
 - **Telemetry snapshot**: the newest validated packet available to the UI.
 - **Overlay**: a transparent, non-interactive gamescope surface displaying live telemetry and companion state.
 - **Session wrapper**: the Steam launch-command entry point that owns the overlay and game child lifecycles.
+- **Vehicle profile**: persistent fuel, odometer, oil-service, and usage-pause state for one telemetry car ordinal.
+- **Mini nav**: the directional overlay pointing to the closest selected point-of-interest type.
+- **Interaction key**: the contextual control that opens the main menu, executes its selected option, or closes the vehicle card.
 
 ## Boundaries
 

@@ -1,5 +1,7 @@
 use crate::{
+    car::{CarDatabase, CarInfo},
     locations::{LocationKind, Locations},
+    menu::{MenuEffect, MenuPage, MenuState},
     model::{LifeSnapshot, Simulation},
     telemetry::{PACKET_SIZE, Telemetry, parse},
 };
@@ -11,7 +13,7 @@ use std::{
     path::PathBuf,
     sync::{
         Arc, RwLock,
-        atomic::{AtomicBool, Ordering},
+        mpsc::{self, Receiver, Sender},
     },
     thread,
     time::{Duration, Instant},
@@ -20,13 +22,22 @@ use x11rb::{
     connection::Connection,
     protocol::{
         Event,
-        xproto::{Atom, AtomEnum, ConnectionExt, GrabMode, ModMask, PropMode},
+        xinput::{ConnectionExt as _, EventMask, XIEventMask},
+        xproto::{Atom, AtomEnum, ConnectionExt, PropMode},
     },
     rust_connection::RustConnection,
     wrapper::ConnectionExt as _,
 };
 
 const WINDOW_TITLE: &str = "ForzaLife Linux Overlay";
+const MENU_TIMEOUT: Duration = Duration::from_secs(4);
+
+#[derive(Clone, Copy)]
+enum InputEvent {
+    Primary,
+    Up,
+    Down,
+}
 
 #[derive(Default)]
 struct Latest {
@@ -85,13 +96,17 @@ pub fn run(port: u16) -> eframe::Result {
     let state_path = state_path();
     let locations_path = locations_path();
     let locations = Arc::new(RwLock::new(Locations::load(&locations_path)));
+    let cars = Arc::new(CarDatabase::bundled());
+    let simulation = Arc::new(RwLock::new(Simulation::load(&state_path)));
     spawn_receiver(
         port,
         Arc::clone(&latest),
         Arc::clone(&locations),
+        Arc::clone(&cars),
+        Arc::clone(&simulation),
         state_path,
     );
-    let menu_open = spawn_menu_toggle();
+    let input = spawn_input_listener();
     let [width, height] = screen_size().unwrap_or([1920.0, 1080.0]);
 
     let viewport = egui::ViewportBuilder::default()
@@ -120,13 +135,15 @@ pub fn run(port: u16) -> eframe::Result {
             Ok(Box::new(OverlayApp {
                 latest,
                 locations,
-                locations_path,
-                menu_open,
-                applied_menu_open: false,
+                cars,
+                simulation,
+                input,
+                menu: MenuState::default(),
+                last_menu_activity: Instant::now(),
+                navigation_target: None,
                 classified: false,
                 classification_error_reported: false,
                 boost: BoostGaugeState::default(),
-                menu_selection: 0,
                 screen_size: [width, height],
                 port,
             }))
@@ -137,13 +154,15 @@ pub fn run(port: u16) -> eframe::Result {
 struct OverlayApp {
     latest: Arc<RwLock<Latest>>,
     locations: Arc<RwLock<Locations>>,
-    locations_path: PathBuf,
-    menu_open: Arc<AtomicBool>,
-    applied_menu_open: bool,
+    cars: Arc<CarDatabase>,
+    simulation: Arc<RwLock<Simulation>>,
+    input: Receiver<InputEvent>,
+    menu: MenuState,
+    last_menu_activity: Instant,
+    navigation_target: Option<LocationKind>,
     classified: bool,
     classification_error_reported: bool,
     boost: BoostGaugeState,
-    menu_selection: usize,
     screen_size: [f32; 2],
     port: u16,
 }
@@ -165,17 +184,7 @@ impl eframe::App for OverlayApp {
                 Err(_) => {}
             }
         }
-        let menu_open = self.menu_open.load(Ordering::Relaxed);
-        if menu_open != self.applied_menu_open {
-            context.send_viewport_cmd(egui::ViewportCommand::MousePassthrough(!menu_open));
-            context.send_viewport_cmd(egui::ViewportCommand::CursorVisible(menu_open));
-            if menu_open {
-                context.send_viewport_cmd(egui::ViewportCommand::Focus);
-                self.menu_selection = 0;
-            }
-            self.applied_menu_open = menu_open;
-        }
-        let (telemetry, life, fresh, packets, rejected) = {
+        let (telemetry, mut life, fresh, packets, rejected) = {
             let latest = self.latest.read().unwrap();
             (
                 latest.telemetry.clone(),
@@ -189,11 +198,31 @@ impl eframe::App for OverlayApp {
         };
 
         let active_telemetry = telemetry.as_ref().filter(|_| fresh);
+        if let Some(updated) =
+            self.handle_input(active_telemetry.map(|telemetry| telemetry.car_ordinal))
+        {
+            life = Some(updated);
+        }
+        if matches!(self.menu.page(), MenuPage::Main | MenuPage::Navigation)
+            && self.last_menu_activity.elapsed() >= MENU_TIMEOUT
+        {
+            self.menu.close();
+        }
+
         if let Some(data) = active_telemetry {
             self.boost.update(data);
             render_race_hud(context, data, life.as_ref(), &self.boost, self.screen_size);
             let locations = self.locations.read().unwrap();
-            render_navigation_hud(context, data, &locations, self.screen_size);
+            if let Some(target) = self.navigation_target {
+                if locations
+                    .nearest(target, data.position)
+                    .is_some_and(|(_, distance)| distance <= 2.0)
+                {
+                    self.navigation_target = None;
+                } else {
+                    render_navigation_hud(context, data, &locations, target, self.screen_size);
+                }
+            }
         } else {
             render_intro(
                 context,
@@ -205,96 +234,71 @@ impl eframe::App for OverlayApp {
             );
         }
 
-        if menu_open {
-            let can_add = active_telemetry.is_some();
-            if !can_add {
-                self.menu_selection = 4;
-            }
-            if context.input(|input| input.key_pressed(egui::Key::ArrowUp)) {
-                self.menu_selection = move_menu_selection(self.menu_selection, -1, can_add);
-            }
-            if context.input(|input| input.key_pressed(egui::Key::ArrowDown)) {
-                self.menu_selection = move_menu_selection(self.menu_selection, 1, can_add);
-            }
-            let mut action = context
-                .input(|input| input.key_pressed(egui::Key::Enter))
-                .then_some(self.menu_selection);
-            let location_count = self.locations.read().unwrap().locations.len();
-            egui::Area::new(egui::Id::new("forzalife-menu"))
-                .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
-                .show(context, |ui| {
-                    egui::Frame::new()
-                        .fill(egui::Color32::from_black_alpha(221))
-                        .stroke(egui::Stroke::new(2.5_f32, forza_pink()))
-                        .inner_margin(egui::Margin::symmetric(75, 24))
-                        .show(ui, |ui| {
-                            ui.set_width(280.0);
-                            ui.label(
-                                egui::RichText::new("FORZALIFE")
-                                    .strong()
-                                    .size(18.0)
-                                    .color(egui::Color32::WHITE),
-                            );
-                            ui.add_space(12.0);
-                            let rows = [
-                                "⛽ Add gas station here".to_owned(),
-                                "🔧 Add workshop here".to_owned(),
-                                format!("📍 {location_count} saved locations"),
-                                "💼 Jobs".to_owned(),
-                                "❌ Close menu".to_owned(),
-                            ];
-                            for (index, text) in rows.into_iter().enumerate() {
-                                let enabled = index == 4 || (can_add && index < 2);
-                                let button = egui::Button::new(egui::RichText::new(text).color(
-                                    if enabled {
-                                        egui::Color32::WHITE
-                                    } else {
-                                        egui::Color32::from_white_alpha(90)
-                                    },
-                                ))
-                                .fill(if self.menu_selection == index {
-                                    forza_pink()
-                                } else {
-                                    egui::Color32::TRANSPARENT
-                                })
-                                .stroke(egui::Stroke::NONE);
-                                let response = ui
-                                    .add_enabled_ui(enabled, |ui| {
-                                        ui.add_sized([280.0, 38.0], button)
-                                    })
-                                    .inner;
-                                if response.clicked() {
-                                    self.menu_selection = index;
-                                    action = Some(index);
-                                }
-                            }
-                        });
-                });
-            match action {
-                Some(0) => {
-                    if let Some(data) = active_telemetry {
-                        self.add_location(LocationKind::Gas, data.position);
-                    }
+        let menu_opacity = context.animate_bool_with_time(
+            egui::Id::new("forzalife-menu-opacity"),
+            matches!(self.menu.page(), MenuPage::Main | MenuPage::Navigation),
+            0.2,
+        );
+        let card_opacity = context.animate_bool_with_time(
+            egui::Id::new("forzalife-card-opacity"),
+            self.menu.page() == MenuPage::VehicleCard,
+            0.25,
+        );
+        match self.menu.page() {
+            MenuPage::Main => render_menu(
+                context,
+                &main_menu_rows(life.as_ref().is_some_and(|life| life.is_usage_paused)),
+                self.menu.selected(),
+                menu_opacity,
+            ),
+            MenuPage::Navigation => render_menu(
+                context,
+                &navigation_menu_rows(),
+                self.menu.selected(),
+                menu_opacity,
+            ),
+            MenuPage::VehicleCard => {
+                if let (Some(data), Some(life)) = (active_telemetry, life.as_ref()) {
+                    render_vehicle_card(
+                        context,
+                        self.cars.get(data.car_ordinal),
+                        life,
+                        data.num_cylinders,
+                        card_opacity,
+                    );
+                } else {
+                    self.menu.close();
                 }
-                Some(1) => {
-                    if let Some(data) = active_telemetry {
-                        self.add_location(LocationKind::Workshop, data.position);
-                    }
-                }
-                Some(4) => self.menu_open.store(false, Ordering::Relaxed),
-                _ => {}
             }
+            MenuPage::Closed => {}
         }
     }
 }
 
 impl OverlayApp {
-    fn add_location(&self, kind: LocationKind, position: [f32; 3]) {
-        let mut locations = self.locations.write().unwrap();
-        locations.add(kind, position);
-        if let Err(error) = locations.save(&self.locations_path) {
-            eprintln!("could not save service locations: {error}");
+    fn handle_input(&mut self, car_ordinal: Option<i32>) -> Option<LifeSnapshot> {
+        let mut updated_life = None;
+        while let Ok(input) = self.input.try_recv() {
+            let Some(car_ordinal) = car_ordinal else {
+                continue;
+            };
+            self.last_menu_activity = Instant::now();
+            match input {
+                InputEvent::Up => self.menu.up(),
+                InputEvent::Down => self.menu.down(),
+                InputEvent::Primary => match self.menu.primary() {
+                    MenuEffect::None => {}
+                    MenuEffect::ToggleUsage => {
+                        let mut simulation = self.simulation.write().unwrap();
+                        simulation.toggle_usage(car_ordinal);
+                        updated_life = simulation.current(car_ordinal);
+                        self.latest.write().unwrap().life = updated_life.clone();
+                    }
+                    MenuEffect::SetNavigation(target) => self.navigation_target = target,
+                },
+            }
         }
+        updated_life
     }
 }
 
@@ -310,13 +314,238 @@ fn warning_color() -> egui::Color32 {
     egui::Color32::from_rgba_unmultiplied(255, 153, 0, 128)
 }
 
-fn move_menu_selection(current: usize, direction: i32, can_add: bool) -> usize {
-    let enabled: &[usize] = if can_add { &[0, 1, 4] } else { &[4] };
-    let position = enabled
-        .iter()
-        .position(|&index| index == current)
-        .unwrap_or(0);
-    enabled[(position as i32 + direction).rem_euclid(enabled.len() as i32) as usize]
+struct MenuRow {
+    icon: &'static str,
+    text: String,
+    enabled: bool,
+}
+
+fn main_menu_rows(usage_paused: bool) -> Vec<MenuRow> {
+    vec![
+        MenuRow {
+            icon: "🌐",
+            text: "Set mini nav".to_owned(),
+            enabled: true,
+        },
+        MenuRow {
+            icon: "🚗",
+            text: "Vehicle info card".to_owned(),
+            enabled: true,
+        },
+        MenuRow {
+            icon: if usage_paused { "▶" } else { "⏸" },
+            text: if usage_paused {
+                "Resume fuel usage for this car"
+            } else {
+                "Pause fuel usage for this car"
+            }
+            .to_owned(),
+            enabled: true,
+        },
+        MenuRow {
+            icon: "💼",
+            text: "Jobs".to_owned(),
+            enabled: false,
+        },
+        MenuRow {
+            icon: "❌",
+            text: "Close menu".to_owned(),
+            enabled: true,
+        },
+    ]
+}
+
+fn navigation_menu_rows() -> Vec<MenuRow> {
+    vec![
+        MenuRow {
+            icon: "⛽",
+            text: "Closest gas station".to_owned(),
+            enabled: true,
+        },
+        MenuRow {
+            icon: "🔧",
+            text: "Closest workshop".to_owned(),
+            enabled: true,
+        },
+        MenuRow {
+            icon: "📴",
+            text: "End navigation".to_owned(),
+            enabled: true,
+        },
+        MenuRow {
+            icon: "↩",
+            text: "Back".to_owned(),
+            enabled: true,
+        },
+    ]
+}
+
+fn render_menu(context: &egui::Context, rows: &[MenuRow], selected: usize, opacity: f32) {
+    egui::Area::new(egui::Id::new("forzalife-menu"))
+        .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+        .show(context, |ui| {
+            ui.set_opacity(opacity);
+            ui.set_width(430.0);
+            ui.vertical_centered(|ui| {
+                for (index, row) in rows.iter().enumerate() {
+                    let (rect, _) =
+                        ui.allocate_exact_size(egui::vec2(280.0, 46.0), egui::Sense::hover());
+                    let selected = selected == index;
+                    let painter = ui.painter_at(rect);
+                    painter.rect_filled(
+                        rect,
+                        0.0,
+                        if selected {
+                            egui::Color32::WHITE
+                        } else {
+                            egui::Color32::from_black_alpha(221)
+                        },
+                    );
+                    let color = if selected {
+                        egui::Color32::BLACK
+                    } else if row.enabled {
+                        egui::Color32::WHITE
+                    } else {
+                        egui::Color32::from_white_alpha(102)
+                    };
+                    painter.text(
+                        rect.left_center() + egui::vec2(18.0, 0.0),
+                        egui::Align2::LEFT_CENTER,
+                        row.icon,
+                        egui::FontId::proportional(20.0),
+                        color,
+                    );
+                    painter.text(
+                        rect.left_center() + egui::vec2(58.0, 0.0),
+                        egui::Align2::LEFT_CENTER,
+                        &row.text,
+                        egui::FontId::proportional(16.0),
+                        color,
+                    );
+                    ui.add_space(3.0);
+                }
+            });
+        });
+}
+
+fn render_vehicle_card(
+    context: &egui::Context,
+    car: Option<&CarInfo>,
+    life: &LifeSnapshot,
+    num_cylinders: i32,
+    opacity: f32,
+) {
+    let title = car
+        .map(CarInfo::display_name)
+        .unwrap_or_else(|| format!("CAR {}", life.car_ordinal));
+    let year = car
+        .filter(|car| car.year > 0)
+        .map(|car| car.year.to_string())
+        .unwrap_or_default();
+    let country = car.map(|car| car.country.clone()).unwrap_or_default();
+    let tank_liters = car
+        .map(|car| car.tank_capacity_liters(num_cylinders))
+        .unwrap_or_else(|| CarInfo::fallback_tank_capacity_liters(num_cylinders));
+    let fuel_color = if life.fuel_percent <= 0.0 {
+        egui::Color32::RED
+    } else if life.fuel_percent <= 0.2 {
+        egui::Color32::from_rgb(255, 153, 0)
+    } else {
+        egui::Color32::WHITE
+    };
+    let oil_color = if life.oil_remaining_m <= 0.0 {
+        egui::Color32::RED
+    } else {
+        egui::Color32::WHITE
+    };
+    let mut items = vec![
+        ("Production year", year, egui::Color32::WHITE),
+        ("Country", country, egui::Color32::WHITE),
+    ];
+    items.push(if num_cylinders == 0 {
+        (
+            "Battery level",
+            format!("{:.1} / {tank_liters:.0} kW", life.fuel_liters),
+            fuel_color,
+        )
+    } else {
+        (
+            "Fuel level",
+            format!("{:.1} / {tank_liters:.0} L", life.fuel_liters),
+            fuel_color,
+        )
+    });
+    items.extend([
+        (
+            "Trip Odometer",
+            format!("{:.1} km", life.trip_m / 1_000.0),
+            egui::Color32::WHITE,
+        ),
+        (
+            "Odometer",
+            format!("{:.0} km", life.odometer_m / 1_000.0),
+            egui::Color32::WHITE,
+        ),
+    ]);
+    if num_cylinders != 0 {
+        items.push((
+            "Next oil service at",
+            format!(
+                "{:.0} km",
+                (life.odometer_m + life.oil_remaining_m) / 1_000.0
+            ),
+            oil_color,
+        ));
+    }
+
+    egui::Area::new(egui::Id::new("forzalife-vehicle-card"))
+        .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+        .show(context, |ui| {
+            ui.set_opacity(opacity);
+            egui::Frame::new()
+                .fill(egui::Color32::from_black_alpha(221))
+                .inner_margin(egui::Margin::symmetric(30, 24))
+                .show(ui, |ui| {
+                    ui.set_width(720.0);
+                    ui.label(
+                        egui::RichText::new(title)
+                            .size(28.0)
+                            .strong()
+                            .italics()
+                            .color(egui::Color32::WHITE),
+                    );
+                    ui.label(
+                        egui::RichText::new("Vehicle Info Card")
+                            .size(15.0)
+                            .color(forza_pink()),
+                    );
+                    ui.add_space(22.0);
+                    for row in items.chunks(3) {
+                        ui.columns(3, |columns| {
+                            for (column, (label, value, color)) in
+                                columns.iter_mut().zip(row.iter())
+                            {
+                                column.label(
+                                    egui::RichText::new(*label)
+                                        .size(12.0)
+                                        .color(egui::Color32::from_white_alpha(140)),
+                                );
+                                column.label(
+                                    egui::RichText::new(value).size(19.0).strong().color(*color),
+                                );
+                            }
+                        });
+                        ui.add_space(18.0);
+                    }
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        ui.label(
+                            egui::RichText::new("Press [L] to close")
+                                .size(12.0)
+                                .color(egui::Color32::from_white_alpha(150)),
+                        );
+                    });
+                });
+        });
 }
 
 fn render_intro(
@@ -415,7 +644,9 @@ fn render_race_hud(
                             );
                         });
                         ui.add_space(7.0);
-                        fuel_and_oil(ui, life);
+                        if !life.is_usage_paused {
+                            fuel_and_oil(ui, life);
+                        }
                     }
                 });
             });
@@ -514,19 +745,21 @@ fn render_navigation_hud(
     context: &egui::Context,
     telemetry: &Telemetry,
     locations: &Locations,
+    target: LocationKind,
     screen_size: [f32; 2],
 ) {
-    if locations.locations.is_empty() {
+    let Some((location, distance)) = locations.nearest(target, telemetry.position) else {
         return;
-    }
+    };
     egui::Area::new(egui::Id::new("forzalife-navigation"))
         .fixed_pos([32.0, (screen_size[1] - 180.0).max(0.0)])
         .show(context, |ui| {
             egui::Frame::new()
-                .fill(egui::Color32::from_black_alpha(110))
-                .corner_radius(8)
-                .inner_margin(10)
-                .show(ui, |ui| navigation(ui, telemetry, locations));
+                .fill(egui::Color32::from_black_alpha(221))
+                .inner_margin(egui::Margin::symmetric(15, 10))
+                .show(ui, |ui| {
+                    navigation(ui, telemetry, location.position, distance)
+                });
         });
 }
 
@@ -534,6 +767,8 @@ fn spawn_receiver(
     port: u16,
     latest: Arc<RwLock<Latest>>,
     locations: Arc<RwLock<Locations>>,
+    cars: Arc<CarDatabase>,
+    simulation: Arc<RwLock<Simulation>>,
     state_path: PathBuf,
 ) {
     thread::spawn(move || {
@@ -544,47 +779,53 @@ fn spawn_receiver(
                 return;
             }
         };
-        let mut simulation = Simulation::load(&state_path);
         let mut last_save = Instant::now();
         let mut packet = [0_u8; PACKET_SIZE + 1];
         loop {
             match socket.recv(&mut packet) {
-                Ok(size) => {
-                    let mut state = latest.write().unwrap();
-                    match parse(&packet[..size]) {
-                        Ok(telemetry) => {
-                            let mut life = simulation.update(&telemetry);
-                            if telemetry.speed_mps.abs() < 1.0 {
-                                let locations = locations.read().unwrap();
-                                if locations
-                                    .nearest(LocationKind::Gas, telemetry.position)
-                                    .is_some_and(|(_, distance)| distance <= 25.0)
-                                {
-                                    simulation.refuel(telemetry.car_ordinal);
-                                    life = simulation.update(&telemetry);
-                                }
-                                if locations
-                                    .nearest(LocationKind::Workshop, telemetry.position)
-                                    .is_some_and(|(_, distance)| distance <= 25.0)
-                                {
-                                    simulation.service_oil(telemetry.car_ordinal);
-                                    life = simulation.update(&telemetry);
-                                }
+                Ok(size) => match parse(&packet[..size]) {
+                    Ok(telemetry) => {
+                        let tank_liters = cars
+                            .get(telemetry.car_ordinal)
+                            .map(|car| car.tank_capacity_liters(telemetry.num_cylinders))
+                            .unwrap_or_else(|| {
+                                CarInfo::fallback_tank_capacity_liters(telemetry.num_cylinders)
+                            });
+                        let mut simulation = simulation.write().unwrap();
+                        let mut life = simulation.update_with_capacity(&telemetry, tank_liters);
+                        if telemetry.speed_mps.abs() < 1.0 {
+                            let locations = locations.read().unwrap();
+                            if locations
+                                .nearest(LocationKind::Gas, telemetry.position)
+                                .is_some_and(|(_, distance)| distance <= 25.0)
+                            {
+                                simulation.refuel(telemetry.car_ordinal);
+                                life = simulation.update_with_capacity(&telemetry, tank_liters);
                             }
-                            state.telemetry = Some(telemetry);
-                            state.life = Some(life);
-                            state.received_at = Some(Instant::now());
-                            state.packets += 1;
-                            if last_save.elapsed() >= Duration::from_secs(5) {
-                                if let Err(error) = simulation.save(&state_path) {
-                                    eprintln!("could not save vehicle state: {error}");
-                                }
-                                last_save = Instant::now();
+                            if locations
+                                .nearest(LocationKind::Workshop, telemetry.position)
+                                .is_some_and(|(_, distance)| distance <= 25.0)
+                            {
+                                simulation.service_oil(telemetry.car_ordinal);
+                                life = simulation.update_with_capacity(&telemetry, tank_liters);
                             }
                         }
-                        Err(_) => state.rejected += 1,
+                        if last_save.elapsed() >= Duration::from_secs(5) {
+                            if let Err(error) = simulation.save(&state_path) {
+                                eprintln!("could not save vehicle state: {error}");
+                            }
+                            last_save = Instant::now();
+                        }
+                        drop(simulation);
+
+                        let mut state = latest.write().unwrap();
+                        state.telemetry = Some(telemetry);
+                        state.life = Some(life);
+                        state.received_at = Some(Instant::now());
+                        state.packets += 1;
                     }
-                }
+                    Err(_) => latest.write().unwrap().rejected += 1,
+                },
                 Err(error) => {
                     eprintln!("UDP receive failed: {error}");
                     return;
@@ -594,47 +835,47 @@ fn spawn_receiver(
     });
 }
 
-fn navigation(ui: &mut egui::Ui, telemetry: &Telemetry, locations: &Locations) {
-    ui.add_space(5.0);
+fn navigation(ui: &mut egui::Ui, telemetry: &Telemetry, target_position: [f32; 3], distance: f32) {
     ui.horizontal(|ui| {
-        for kind in [LocationKind::Gas, LocationKind::Workshop] {
-            if let Some((location, distance)) = locations.nearest(kind, telemetry.position) {
-                let color = match kind {
-                    LocationKind::Gas => egui::Color32::from_rgb(140, 210, 30),
-                    LocationKind::Workshop => egui::Color32::from_rgb(80, 170, 255),
-                };
-                ui.colored_label(color, format!("{} • {:.0} m", location.name, distance));
-            }
-        }
-    });
-    let (response, painter) = ui.allocate_painter(egui::vec2(490.0, 92.0), egui::Sense::hover());
-    let rect = response.rect;
-    painter.rect_filled(rect, 6.0, egui::Color32::from_black_alpha(100));
-    let center = rect.center();
-    painter.circle_filled(center, 4.0, egui::Color32::WHITE);
-    let sin = telemetry.yaw.sin();
-    let cos = telemetry.yaw.cos();
-    for location in &locations.locations {
-        let dx = location.position[0] - telemetry.position[0];
-        let dz = location.position[2] - telemetry.position[2];
-        let right = dx * cos - dz * sin;
-        let forward = dx * sin + dz * cos;
-        let point = center + egui::vec2(right, -forward) * 0.04;
-        if rect.shrink(5.0).contains(point) {
-            let color = match location.kind {
-                LocationKind::Gas => egui::Color32::from_rgb(140, 210, 30),
-                LocationKind::Workshop => egui::Color32::from_rgb(80, 170, 255),
+        let (rect, _) = ui.allocate_exact_size(egui::vec2(56.0, 56.0), egui::Sense::hover());
+        let painter = ui.painter_at(rect);
+        let angle = (target_position[0] - telemetry.position[0])
+            .atan2(target_position[2] - telemetry.position[2])
+            - telemetry.yaw;
+        let direction = egui::vec2(angle.sin(), -angle.cos());
+        let right = egui::vec2(-direction.y, direction.x);
+        painter.add(egui::Shape::convex_polygon(
+            vec![
+                rect.center() + direction * 24.0,
+                rect.center() - direction * 14.0 + right * 11.0,
+                rect.center() - direction * 8.0,
+                rect.center() - direction * 14.0 - right * 11.0,
+            ],
+            egui::Color32::WHITE,
+            egui::Stroke::NONE,
+        ));
+        ui.add_space(12.0);
+        ui.vertical(|ui| {
+            let (value, unit) = if distance >= 1_000.0 {
+                (format!("{:.1}", distance / 1_000.0), "KM")
+            } else {
+                (format!("{distance:.0}"), "M")
             };
-            painter.circle_filled(point, 4.0, color);
-        }
-    }
-    painter.text(
-        rect.left_top() + egui::vec2(6.0, 5.0),
-        egui::Align2::LEFT_TOP,
-        "SERVICE MAP • 25 m refuel/service radius",
-        egui::FontId::monospace(10.0),
-        egui::Color32::GRAY,
-    );
+            ui.label(
+                egui::RichText::new(value)
+                    .size(28.0)
+                    .strong()
+                    .italics()
+                    .color(egui::Color32::WHITE),
+            );
+            ui.label(
+                egui::RichText::new(unit)
+                    .size(12.0)
+                    .strong()
+                    .color(egui::Color32::from_white_alpha(128)),
+            );
+        });
+    });
 }
 
 fn screen_size() -> Result<[f32; 2], Box<dyn std::error::Error>> {
@@ -679,48 +920,74 @@ fn intern(connection: &RustConnection, name: &[u8]) -> Result<Atom, Box<dyn std:
     Ok(connection.intern_atom(false, name)?.reply()?.atom)
 }
 
-fn spawn_menu_toggle() -> Arc<AtomicBool> {
-    let open = Arc::new(AtomicBool::new(false));
-    let thread_open = Arc::clone(&open);
+fn spawn_input_listener() -> Receiver<InputEvent> {
+    let (sender, receiver) = mpsc::channel();
     thread::spawn(move || {
-        if let Err(error) = watch_menu_key(&thread_open) {
-            eprintln!("could not register the L menu key: {error}");
+        if let Err(error) = watch_input(sender) {
+            eprintln!("could not register the ForzaLife menu keys: {error}");
         }
     });
-    open
+    receiver
 }
 
-fn watch_menu_key(open: &AtomicBool) -> Result<(), Box<dyn std::error::Error>> {
+fn watch_input(sender: Sender<InputEvent>) -> Result<(), Box<dyn std::error::Error>> {
     let (connection, screen) = RustConnection::connect(None)?;
     let root = connection.setup().roots[screen].root;
     let setup = connection.setup();
     let first = setup.min_keycode;
     let count = setup.max_keycode - first + 1;
     let mapping = connection.get_keyboard_mapping(first, count)?.reply()?;
-    let keycode = mapping
-        .keysyms
-        .chunks(usize::from(mapping.keysyms_per_keycode))
-        .position(|symbols| symbols.contains(&u32::from(b'l')))
-        .map(|index| first + index as u8)
-        .ok_or("L key was not found in the X11 keymap")?;
-
-    connection.grab_key(
-        false,
-        root,
-        ModMask::ANY,
-        keycode,
-        GrabMode::ASYNC,
-        GrabMode::ASYNC,
-    )?;
+    let keycode = |symbol: u8| {
+        mapping
+            .keysyms
+            .chunks(usize::from(mapping.keysyms_per_keycode))
+            .position(|symbols| symbols.contains(&u32::from(symbol)))
+            .map(|index| first + index as u8)
+    };
+    let bindings = [
+        (
+            keycode(b'l').ok_or("L key was not found in the X11 keymap")?,
+            InputEvent::Primary,
+        ),
+        (
+            keycode(b';').ok_or("semicolon key was not found in the X11 keymap")?,
+            InputEvent::Down,
+        ),
+        (
+            keycode(b'\'').ok_or("apostrophe key was not found in the X11 keymap")?,
+            InputEvent::Up,
+        ),
+    ];
+    connection.xinput_xi_query_version(2, 0)?.reply()?;
+    connection
+        .xinput_xi_select_events(
+            root,
+            &[EventMask {
+                deviceid: 1,
+                mask: vec![XIEventMask::RAW_KEY_PRESS | XIEventMask::RAW_KEY_RELEASE],
+            }],
+        )?
+        .check()?;
     connection.flush()?;
-    let mut pressed = false;
+    let mut pressed = [false; 256];
     loop {
         match connection.wait_for_event()? {
-            Event::KeyPress(event) if event.detail == keycode && !pressed => {
-                open.fetch_xor(true, Ordering::Relaxed);
-                pressed = true;
+            Event::XinputRawKeyPress(event)
+                if event.detail < 256 && !pressed[event.detail as usize] =>
+            {
+                if let Some((_, input)) = bindings
+                    .iter()
+                    .find(|(keycode, _)| u32::from(*keycode) == event.detail)
+                {
+                    sender
+                        .send(*input)
+                        .map_err(|_| "overlay input receiver closed")?;
+                    pressed[event.detail as usize] = true;
+                }
             }
-            Event::KeyRelease(event) if event.detail == keycode => pressed = false,
+            Event::XinputRawKeyRelease(event) if event.detail < 256 => {
+                pressed[event.detail as usize] = false;
+            }
             _ => {}
         }
     }
@@ -744,7 +1011,7 @@ fn locations_path() -> PathBuf {
 
 #[cfg(test)]
 mod tests {
-    use super::{BoostGaugeState, boost_needle_angle, move_menu_selection};
+    use super::{BoostGaugeState, boost_needle_angle};
 
     #[test]
     fn boost_needle_matches_the_windows_gauge_endpoints() {
@@ -763,13 +1030,5 @@ mod tests {
         boost.update_value(2, 0.0);
         assert_eq!(boost.max_display, 1);
         assert!(!boost.visible);
-    }
-
-    #[test]
-    fn menu_navigation_wraps_over_enabled_rows() {
-        assert_eq!(move_menu_selection(0, -1, true), 4);
-        assert_eq!(move_menu_selection(1, 1, true), 4);
-        assert_eq!(move_menu_selection(4, 1, true), 0);
-        assert_eq!(move_menu_selection(0, 1, false), 4);
     }
 }

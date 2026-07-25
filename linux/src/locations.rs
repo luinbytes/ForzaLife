@@ -6,6 +6,7 @@ use std::{fs, io, path::Path};
 pub enum LocationKind {
     Gas,
     Workshop,
+    ConvenienceStore,
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -21,6 +22,38 @@ pub struct Locations {
 }
 
 impl Locations {
+    pub fn bundled() -> Self {
+        let mut locations = Vec::new();
+        let mut counts = [0_usize; 3];
+        for line in include_str!("../assets/world_map.csv").lines().skip(1) {
+            let fields: Vec<_> = line.split(',').collect();
+            if fields.len() != 4 {
+                continue;
+            }
+            let (kind, label, count_index) = match fields[0] {
+                "1" => (LocationKind::Gas, "Gas station", 0),
+                "2" => (LocationKind::Workshop, "Workshop", 1),
+                "3" => (LocationKind::ConvenienceStore, "Konbini", 2),
+                _ => continue,
+            };
+            let Some(position) = fields[1..4]
+                .iter()
+                .map(|value| value.parse().ok())
+                .collect::<Option<Vec<f32>>>()
+                .and_then(|values| values.try_into().ok())
+            else {
+                continue;
+            };
+            counts[count_index] += 1;
+            locations.push(Location {
+                name: format!("{label} {}", counts[count_index]),
+                kind,
+                position,
+            });
+        }
+        Self { locations }
+    }
+
     pub fn nearest(&self, kind: LocationKind, position: [f32; 3]) -> Option<(&Location, f32)> {
         self.locations
             .iter()
@@ -39,6 +72,7 @@ impl Locations {
         let label = match kind {
             LocationKind::Gas => "Gas station",
             LocationKind::Workshop => "Workshop",
+            LocationKind::ConvenienceStore => "Konbini",
         };
         self.locations.push(Location {
             name: format!("{label} {number}"),
@@ -48,18 +82,31 @@ impl Locations {
     }
 
     pub fn load(path: &Path) -> Self {
-        fs::read(path)
+        let mut bundled = Self::bundled();
+        let custom: Self = fs::read(path)
             .ok()
             .and_then(|bytes| serde_json::from_slice(&bytes).ok())
-            .unwrap_or_default()
+            .unwrap_or_default();
+        bundled.locations.extend(custom.locations);
+        bundled
     }
 
     pub fn save(&self, path: &Path) -> io::Result<()> {
         if let Some(parent) = path.parent() {
             fs::create_dir_all(parent)?;
         }
+        let bundled = Self::bundled();
+        let locations = self
+            .locations
+            .strip_prefix(bundled.locations.as_slice())
+            .unwrap_or(&self.locations);
         let temporary = path.with_extension("json.tmp");
-        fs::write(&temporary, serde_json::to_vec_pretty(self)?)?;
+        fs::write(
+            &temporary,
+            serde_json::to_vec_pretty(&Self {
+                locations: locations.to_vec(),
+            })?,
+        )?;
         fs::rename(temporary, path)
     }
 }

@@ -1,0 +1,639 @@
+﻿id,make,model_full,model_short,model_common,model_scheme,year,country,rarity,type,fuel_capacity
+247,Toyota,2000GT,Toyota 2000GT,,0,1969,Japan,Barn Find,Rare Classics,60
+249,Ferrari,250 GTO,Ferrari 250 GTO,,0,1962,Italy,Legendary,Classic Racers,130
+251,Mercedes,300 SL Coupé,M-B 300SL,300 SL,0,1954,Germany,Legendary,Rare Classics,130
+253,Ferrari,F355 Berlinetta,Ferrari F355,F355,2,1994,Italy,,Retro Supercars,82
+255,Ferrari,512 TR,Ferrari 512TR,,2,1992,Italy,,Retro Supercars,100
+260,Porsche,911 Carrera RS,911 Carrera '73,,0,1973,Germany,Legendary,Rare Classics,85
+261,Porsche,911 GT2,911 GT2 '95,,0,1995,Germany,,Retro Supercars,92
+262,Porsche,911 GT3,911 GT3 '04,,0,2004,Germany,Rare,Retro Supercars,89
+265,Porsche,911 Turbo 3.3,911 Turbo '82,911 Turbo,0,1982,Germany,,Retro Supercars,80
+268,Porsche,944 Turbo,Porsche 944,,0,1989,Germany,Rare,Retro Sports Cars,80
+269,Porsche,959,Porsche 959,,0,1987,Germany,Treasure Car,Retro Supercars,84
+281,Plymouth,Barracuda Formula S,Barracuda,Cuda,0,1968,USA,Rare,Classic Muscle,68
+289,Chevrolet,Camaro Super Sport Coupé,Chevy Camaro '69,Camaro,0,1969,USA,Rare,Classic Muscle,68
+292,Porsche,Carrera GT,Porsche Carrera,,0,2003,Germany,Legendary,Rare Classics,92
+295,Toyota,Celica Sport Specialty II,Toyota Celica '03,Celica,0,2003,Japan,Rare,Retro Sports Cars,55
+296,TVR,Cerbera Speed 12,TVR Speed 12,,0,1998,UK,,Retro Supercars,100
+299,Chevrolet,Chevelle Super Sport 454,Chevelle '70,Chevelle,1,1970,USA,Rare,Classic Muscle,76
+302,Honda,Civic Type R,Honda Civic '04,,1,2004,Japan,Common,Retro Hot Hatch,50
+306,Shelby,Cobra 427 S/C,Shelby Cobra 427,Cobra,2,1965,USA,,Rare Classics,159
+309,Volkswagen,Corrado VR6,VW Corrado,Corrado,0,1995,Germany,Common,Retro Hot Hatch,70
+312,Chevrolet,Corvette Stingray 427,Corvette '67,Stingray,1,1967,USA,,Classic Muscle,76
+314,Chevrolet,Corvette Z06,Corvette '02,Corvette,0,2002,USA,Legendary,Classic Sports Cars,70
+315,Chevrolet,Corvette ZR-1,Corvette '70,ZR-1,0,1970,USA,Epic,Classic Muscle,68
+316,Lamborghini,Countach LP5000 QV,Lambo Countach,Countach,0,1988,Italy,,Retro Supercars,120
+320,Honda,CR-X SiR,Honda CR-X,CR-X,0,1991,Japan,,Retro Hot Hatch,45
+323,Lancia,Delta HF Integrale EVO,Lancia Delta,Delta,0,1992,Italy,Common,Retro Rally,57
+324,Lamborghini,Diablo GTR,Diablo GTR,,0,1999,Italy,,Extreme Track Toys,100
+325,Lamborghini,Diablo SV,Lambo Diablo SV,,0,1997,Italy,,Retro Supercars,100
+326,Ferrari,Dino 246 GT,Ferrari Dino,Dino,0,1969,Italy,Epic,Rare Classics,65
+327,Mitsubishi,Eclipse GSX,Eclipse GSX,Eclipse,0,1995,Japan,Common,Retro Sports Cars,60
+333,Ferrari,Enzo Ferrari,Ferrari Enzo,Enzo,0,2002,Italy,Legendary,Retro Supercars,110
+336,Jaguar,E-type,Jaguar E-type,,0,1961,UK,,Rare Classics,64
+338,McLaren,F1 GT,McLaren F1 GT,,2,1997,UK,Legendary,Retro Supercars,90
+340,Ferrari,F40,Ferrari F40,,0,1987,Italy,Legendary,Retro Supercars,120
+342,Ferrari,F50,Ferrari F50,,0,1995,Italy,Legendary,Retro Supercars,105
+343,Nissan,Fairlady Z 432,Fairlady Z '69,Fairlady Z,0,1969,Japan,Epic,Classic Sports Cars,60
+344,Nissan,Fairlady Z,Fairlady Z '03,Fairlady Z,0,2003,Japan,Common,Retro Sports Cars,80
+345,Nissan,Fairlady Z Version S Twin Turbo,Fairlady Z '94,Fairlady Z,0,1994,Japan,Epic,Retro Sports Cars,72
+348,Ford,GT,Ford GT '05,,2,2005,USA,Epic,Unlimited Offroad,66
+353,Volkswagen,Golf GTI 16v Mk2,VW GTI Mk2 '92,Golf GTI,1,1992,Germany,Common,Retro Hot Hatch,55
+357,Mitsubishi,GTO,Mitsubishi GTO,,0,1997,Japan,Common,Retro Sports Cars,75
+358,Ferrari,288 GTO,Ferrari 288 GTO,GTO,2,1984,Italy,,Retro Supercars,120
+363,Subaru,Impreza 22B-STi Version,SUBARU 22B '98,Impreza 22B,0,1998,Japan,Legendary,Retro Rally,60
+364,Subaru,IMPREZA WRX STI,SUBARU WRX '04,Impreza WRX,0,2004,Japan,Common,Modern Rally,60
+365,Subaru,IMPREZA WRX STI,SUBARU WRX '05,Impreza WRX,0,2005,Japan,Common,Modern Rally,60
+368,Acura,Integra Type R,Acura Integra,,0,2001,USA,Common,Retro Hot Hatch,50
+374,Mitsubishi,Lancer Evolution IX MR,Lancer MR '06,Evo IX,0,2006,Japan,Epic,Modern Rally,55
+378,Mitsubishi,Lancer Evolution VIII MR,Lancer MR '04,Evo VIII,0,2004,Japan,Rare,Modern Rally,55
+379,Subaru,LEGACY B4 2.0 GT,SUBARU LEGACY,Legacy,2,2005,Japan,Common,Retro Super Saloons,64
+382,BMW,M3,BMW M3 '97,,0,1997,Germany,Rare,Retro Super Saloons,62
+383,BMW,M3,BMW M3 '05,,0,2005,Germany,Rare,Retro Super Saloons,63
+391,Maserati,MC12,Maserati MC12,,2,2004,Italy,,Retro Supercars,115
+398,Toyota,MR2 GT,Toyota MR2 '95,,0,1995,Japan,Rare,Retro Sports Cars,55
+405,Ford,Mustang SVT Cobra R,Ford Mustang '00,,1,2000,USA,Common,Retro Muscle,59
+411,Honda,NSX-R,Honda NSX-R '05,,0,2005,Japan,Epic,Retro Sports Cars,70
+412,Honda,NSX-R,Honda NSX-R '92,,0,1992,Japan,Epic,Retro Sports Cars,70
+417,Buick,Regal GNX,Buick Regal GNX,,2,1987,USA,Epic,Retro Muscle,64
+419,Audi,RS 4,Audi RS 4 '06,,0,2006,Germany,Rare,Modern Super Saloons,63
+420,Audi,RS 6,Audi RS 6 '03,,0,2003,Germany,Rare,Retro Super Saloons,82
+422,Acura,RSX Type S,Acura RSX,,0,2002,USA,Common,Retro Hot Hatch,50
+423,Mazda,Savanna RX-7,Mazda RX-7 '90,,0,1990,Japan,Epic,Retro Sports Cars,70
+427,Honda,S2000,Honda S2000,,0,2004,Japan,Epic,Extreme Track Toys,50
+433,TVR,Sagaris,TVR Sagaris,,2,2005,UK,Rare,Retro Sports Cars,65
+440,Nissan,Silvia K's,Silvia '94,,0,1994,Japan,Common,Retro Sports Cars,65
+455,Toyota,Sprinter Trueno GT Apex,Toyota Trueno,Sprinter Trueno,0,1985,Japan,Epic,Retro Sports Cars,50
+458,Lancia,Stratos HF Stradale,Lancia Stratos,Stratos,2,1974,Italy,Treasure Car,Classic Rally,80
+460,Toyota,Supra 2.0 GT,Toyota Supra '92,Supra,0,1992,Japan,Rare,Retro Sports Cars,70
+461,Toyota,Supra RZ,Toyota Supra '98,,0,1998,Japan,Rare,Retro Sports Cars,70
+483,Dodge,Viper GTS ACR,Dodge Viper '99,Viper ACR,0,1999,USA,,Track Toys,72
+489,Jaguar,XJ220,Jaguar XJ220,,2,1993,UK,Legendary,Retro Supercars,90
+513,Dodge,Charger R/T,Dodge Charger 69,,0,1969,USA,Treasure Car,Classic Muscle,72
+567,Nissan,R390 (GT1),Nissan R390,R390,2,1998,Japan,,Retro Supercars,101
+568,Mercedes,AMG CLK GTR,M-B CLK-GTR,CLK GTR,0,1998,Germany,,Retro Supercars,90
+569,Honda,NSX-R GT,Honda NSX-R GT,,1,1992,Japan,Epic,Retro Sports Cars,70
+615,Peugeot,207 Super 2000,Peugeot 207 S,,0,2007,France,,Rally Monsters,80
+625,Honda,Civic Type R,Honda Civic '07,,0,2007,Japan,Common,Retro Hot Hatch,50
+633,Audi,Sport quattro,Audi quattro,,0,1984,Germany,Legendary,Rally Monsters,90
+634,Renault,5 Turbo,Renault 5 Turbo,,2,1980,France,Rare,Retro Rally,93
+637,Lamborghini,Miura P400,Lambo Miura,Miura,0,1967,Italy,Legendary,Rare Classics,90
+639,Dodge,Challenger R/T,Challenger '70,,0,1970,USA,,Classic Muscle,68
+641,Porsche,911 GT1 Strassenversion,Porsche 911 GT1,911 GT1,0,1997,Germany,Legendary,Retro Supercars,100
+1006,Ferrari,FXX,Ferrari FXX,,0,2005,Italy,Legendary,Extreme Track Toys,112
+1007,Koenigsegg,CCGT,Koenigsegg CCGT,,2,2008,Sweden,Legendary,Extreme Track Toys,100
+1009,Mitsubishi,Lancer Evolution X GSR,Lancer GSR '08,Evo X,0,2008,Japan,Rare,Modern Rally,55
+1011,BMW,M3,BMW M3 '08,,0,2008,Germany,Rare,Retro Super Saloons,63
+1020,Ferrari,F50 GT,Ferrari F50 GT,,0,1995,Italy,Legendary,Retro Supercars,100
+1022,Ferrari,430 Scuderia,Ferrari 430 S,,0,2007,Italy,Epic,Modern Supercars,95
+1023,Ferrari,F40 Competizione,Ferrari F40 C,,0,1989,Italy,Legendary,Retro Racers,120
+1032,Alfa Romeo,8C Competizione,Alfa Romeo 8C,,0,2007,Italy,Epic,GT Cars,90
+1034,Toyota,Celica GT-Four ST205,Toyota Celica'94,Celica GT-Four,1,1994,Japan,Common,Retro Rally,60
+1040,BMW,M1,BMW M1,,0,1981,Germany,Treasure Car,Retro Supercars,116
+1041,Ford,Mustang SVT Cobra R,Ford Mustang '93,,1,1993,USA,Common,Retro Muscle,58
+1042,Nissan,Skyline 2000GT-R,Nissan GT-R '71,,1,1971,Japan,Barn Find,Classic Sports Cars,100
+1045,Pontiac,Firebird Trans Am GTA,Pontiac T/A '87,Trans-Am,0,1987,USA,Common,Retro Muscle,59
+1046,Dodge,Viper SRT-10 ACR,Dodge Viper '08,Viper ACR,0,2008,USA,Rare,Track Toys,70
+1052,Dodge,Ram SRT-10,Dodge Ram SRT-10,,0,2006,USA,,Modern Muscle,98
+1059,BMW,Z4 M Coupé,BMW Z4 '08,,0,2008,Germany,Rare,Modern Sports Cars,55
+1060,Subaru,IMPREZA WRX STI,SUBARU WRX '08,,1,2008,Japan,Common,Modern Rally,64
+1063,Dodge,Charger Daytona HEMI,Charger Daytona,Charger Daytona,0,1969,USA,Epic,Classic Muscle,72
+1064,Chevrolet,Camaro Z28,Chevy Camaro '79,,0,1979,USA,Rare,Classic Muscle,80
+1069,Chevrolet,Corvette ZR1,Corvette '09,,0,2009,USA,Legendary,Classic Sports Cars,68
+1086,Ford,Focus RS,Ford Focus '09,,0,2009,USA,Rare,Rally Monsters,51
+1090,Mercedes,SL 65 AMG Black Series,M-B SL65,,0,2009,Germany,Epic,Super GT,80
+1093,Chevrolet,Corvette,Corvette '60,,1,1960,USA,Legendary,Classic Sports Cars,62
+1103,Nissan,370Z,Nissan 370Z,,0,2010,Japan,,Modern Sports Cars,72
+1104,Datsun,510,Datsun 510,,2,1970,Japan,Common,Classic Sports Cars,46
+1105,Aston Martin,DB5,AM DB5,,0,1964,UK,Epic,Rare Classics,86
+1108,Ford,RS200 Evolution,Ford RS200,RS200,0,1985,USA,Epic,Rally Monsters,116
+1110,Mazda,MX-5 Miata,Mazda MX-5 '94,Miata,0,1994,Japan,Common,Retro Sports Cars,48
+1124,Fiat,131,Abarth 131,,2,1980,Italy,Common,Classic Rally,50
+1126,BMW,M5,BMW M5 '09,,0,2009,Germany,Rare,Retro Super Saloons,70
+1130,McLaren,12C Coupé,McLaren 12C,,2,2011,UK,Epic,Modern Supercars,72
+1131,Ferrari,458 Italia,Ferrari 458,Italia,2,2009,Italy,Epic,Modern Supercars,86
+1150,Alfa Romeo,Giulia Sprint GTA Stradale,Alfa Romeo GTA,Giulia GTA,0,1965,Italy,Rare,Rare Classics,46
+1155,Shelby,Cobra Daytona Coupé,Shelby Daytona,,0,1965,USA,Legendary,Classic Racers,132
+1171,Ferrari,599XX,Ferrari 599XX,,0,2010,Italy,Legendary,Extreme Track Toys,90
+1173,Lamborghini,Murciélago LP 670-4 SV,Lambo Murciélago,Murciélago SV,0,2010,Italy,Epic,Modern Supercars,100
+1175,Pagani,Zonda R,Pagani Zonda R,,0,2009,Italy,Legendary,Extreme Track Toys,100
+1184,Audi,RS 6,Audi RS 6 '09,,0,2009,Germany,Rare,Retro Super Saloons,80
+1200,Audi,R8 LMS,Audi R8 LMS,,0,2009,Germany,Rare,Extreme Track Toys,120
+1204,Renault,Mégane RS 250,Mégane RS 250,,0,2010,France,Rare,Hot Hatch,60
+1215,,NULL CAR,NULL CAR,,0,,,,,
+1216,Audi,RS 3 Sportback,Audi RS 3,RS 3,0,2011,Germany,Common,Super Hot Hatch,60
+1220,Audi,TT RS Coupé,Audi TT RS,TT RS,0,2010,Germany,Rare,Modern Sports Cars,60
+1221,Mazda,Mazdaspeed 3,Mazda 3,,1,2010,Japan,Common,Hot Hatch,60
+1229,Mazda,Furai,Mazda Furai,,0,2008,Japan,,Extreme Track Toys,100
+1231,Volkswagen,Golf R,VW Golf R '10,,0,2010,Germany,Rare,Super Hot Hatch,55
+1253,Noble,M600,Noble M600,,2,2010,UK,Epic,Modern Supercars,68
+1260,Lexus,LFA,Lexus LFA,,0,2010,USA,Epic,Modern Supercars,73
+1269,BMW,2002 Turbo,BMW 2002 Turbo,,2,1973,Germany,Legendary,Classic Sports Cars,70
+1270,DeLorean,DMC-12,DeLorean DMC-12,DeLorean,1,1982,USA,Legendary,Retro Sports Cars,52
+1272,Ford,Escort RS Cosworth,Ford Escort '92,Escort Cosworth,0,1992,USA,Rare,Retro Rally,55
+1273,Honda,Civic Type R,Honda Civic '97,,0,1997,Japan,Common,Retro Hot Hatch,45
+1276,Pontiac,Firebird Trans Am,Pontiac T/A '77,Trans Am,0,1977,USA,Rare,Classic Muscle,80
+1277,Plymouth,Cuda 426 HEMI,Plymouth Cuda,Cuda,0,1971,USA,Epic,Classic Muscle,68
+1278,Ford,XB Falcon GT,Ford XB Falcon,Falcon,0,1973,USA,Rare,Classic Muscle,80
+1282,Nissan,240SX,Nissan 240SX '93,,0,1993,Japan,,Retro Sports Cars,60
+1291,Chevrolet,El Camino Super Sport 454,Chevy El Camino,El Camino,1,1970,USA,Rare,Utility Heroes,76
+1293,Ford,Sierra Cosworth RS500,Ford RS500,Sierra Cosworth,1,1987,USA,,Retro Super Saloons,60
+1294,GMC,Syclone,GMC Syclone,,0,1991,USA,Epic,Pickups & 4x4s,76
+1296,Mercedes,190 E 2.5-16 Evolution II,MB 190 E '90,190E Evo,0,1990,Germany,Epic,Retro Super Saloons,70
+1299,Volvo,242 Turbo Evolution,Volvo 242 Turbo,242 Turbo,2,1983,Sweden,Common,Classic Rally,60
+1300,Chevrolet,Impala Super Sport 409,Chevy Impala,Impala,0,1964,USA,Common,Rods and Customs,76
+1301,Jaguar,D-Type,Jaguar D-Type,,2,1956,UK,Legendary,Classic Racers,168
+1314,McLaren,F1,McLaren F1,,2,1993,UK,Legendary,Retro Supercars,90
+1323,Subaru,WRX STI,SUBARU WRX '11,,2,2011,Japan,Common,Modern Rally,60
+1330,Chevrolet,Camaro Z28,Chevy Camaro '70,,0,1970,USA,Rare,Classic Muscle,68
+1332,Dodge,Dart HEMI Super Stock,Dodge Dart '68,Dart HEMI,2,1968,USA,Legendary,Classic Muscle,68
+1335,Mazda,#55 Mazda 787B,#55 Mazda 787B,787B,0,1991,Japan,,Retro Racers,100
+1350,BMW,X5 M,BMW X5 M,,0,2011,Germany,Common,Sports Utility Heroes,85
+1352,Dodge,Coronet Super Bee,Dodge Super Bee,,0,1970,USA,Rare,Classic Muscle,72
+1355,Ford,Mustang GT Coupé,Ford Mustang '65,Mustang,1,1969,USA,Rare,Classic Muscle,61
+1367,BMW,M5,BMW M5 '03,,0,2003,Germany,Rare,Retro Super Saloons,70
+1368,BMW,M5,BMW M5 '88,,0,1988,Germany,Rare,Retro Super Saloons,70
+1369,Pagani,Zonda Cinque Roadster,Pagani Zonda C,Zonda,0,2010,Italy,Legendary,Hypercars,85
+1376,Lotus,Elise Series 1 Sport 190,Lotus Elise '99,Elise,0,1999,UK,Common,Retro Sports Cars,36
+1379,Chevrolet,Impala Super Sport,Chevy Impala '96,Impala,0,1996,USA,Common,Retro Muscle,87
+1381,Mitsubishi,Galant VR-4,Galant VR-4,,0,1992,Japan,Rare,Retro Rally,60
+1382,Subaru,LEGACY RS,SUBARU LEGACY RS,Legacy,2,1990,Japan,Common,Retro Super Saloons,60
+1388,BMW,M5,BMW M5 '12,,0,2012,Germany,Rare,Retro Super Saloons,80
+1392,Lamborghini,Sesto Elemento,Lambo Sesto,,0,2011,Italy,,Extreme Track Toys,100
+1393,Alfa Romeo,155 Q4,Alfa Romeo 155,,2,1992,Italy,Epic,Retro Super Saloons,60
+1394,GMC,Typhoon,GMC Typhoon,,0,1992,USA,Epic,Sports Utility Heroes,76
+1395,Toyota,MR2 SC,Toyota MR2 '89,,0,1989,Japan,Epic,Retro Sports Cars,54
+1397,Koenigsegg,Agera,Koenigsegg Agera,,0,2011,Sweden,Legendary,Hypercars,80
+1398,Lamborghini,Aventador LP700-4,Aventador '12,Aventador,0,2012,Italy,,Hypercars,90
+1417,Audi,RS 5 Coupé,Audi RS 5,RS5,0,2011,Germany,,Modern Supercars,64
+1418,BMW,M5,BMW M5 '95,,0,1995,Germany,Rare,Retro Super Saloons,90
+1426,Mazda,RX-8 R3,Mazda RX-8,RX-8,0,2011,Japan,Rare,Modern Sports Cars,65
+1428,Volkswagen,Scirocco R,VW Scirocco '11,Scirocco,0,2011,Germany,Rare,Hot Hatch,55
+1429,Chevrolet,Nova Super Sport 396,Chevy Nova '69,Nova,0,1969,USA,Common,Classic Muscle,68
+1435,Volkswagen,Beetle,VW Beetle,,0,1963,Germany,Epic,Rally Monsters,40
+1459,Chevrolet,Bel Air,Chevy Bel Air,,0,1957,USA,Rare,Rods and Customs,60
+1477,Ford,Transit SuperSportVan,Ford Transit SSV,Transit,0,2011,USA,Rare,Utility Heroes,103
+1478,Audi,#2 Audi Sport quattro S1,#2 Audi S1,Sport quattro,0,1986,Germany,Legendary,Rally Monsters,90
+1480,Mazda,RX-7 GSL-SE,Mazda RX-7 '85,RX-7,0,1985,Japan,Treasure Car,Retro Sports Cars,55
+1481,Austin-Healey,3000 MKIII,3000 MKIII,,2,1965,UK,Common,Classic Sports Cars,55
+1493,BMW,850CSi,BMW 850CSi,850,2,1995,Germany,Rare,Retro Sports Cars,90
+1500,Mercedes,C 63 AMG Coupé Black Series,M-B C63,C 63 Black,0,2012,Germany,Epic,Modern Super Saloons,66
+1513,Maserati,Ghibli Cup,Mas. Ghibli '97,Ghibli,0,1997,Italy,Rare,Retro Sports Cars,80
+1514,Mazda,RX-3,Mazda RX-3,,0,1973,Japan,Common,Classic Sports Cars,60
+1517,Toyota,Celica GT-Four RC ST185,Toyota Celica '92,Celica GT-Four,1,1992,Japan,Rare,Retro Rally,68
+1522,Jeep,Wrangler Rubicon,Jeep Wrangler,Wrangler,0,2012,USA,Common,Pickups & 4x4s,70
+1529,Ford,Capri RS3100,Ford Capri MkI,Capri,0,1973,USA,Rare,Classic Sports Cars,58
+1532,Hennessey,Venom GT,Venom GT,,0,2012,USA,,Hypercars,70
+1533,Holden,Torana A9X,Holden Torana,,0,1977,Australia,Rare,Classic Muscle,55
+1537,Toyota,Corolla SR5,Toyota Corolla,,0,1974,Japan,,Classic Sports Cars,50
+1549,Alfa Romeo,33 Stradale,Alfa Romeo 33S,,2,1968,Italy,Legendary,Classic Racers,100
+1559,Mercedes,300 SLR,M-B 300 SLR,,0,1955,Germany,Legendary,Classic Racers,265
+1562,Dodge,Viper GTS,SRT Viper '13,Viper,0,2013,USA,Rare,Track Toys,70
+1564,Chevrolet,Corvette,Corvette '53,,0,1953,USA,Legendary,Classic Sports Cars,67
+1568,Honda,Civic RS,Honda Civic '74,,0,1974,Japan,Epic,Extreme Track Toys,39
+1575,Chevrolet,Monte Carlo Super Sport,Chevy Monte Carlo,Monte Carlo,0,1988,USA,Common,Retro Muscle,60
+1578,Ferrari,250 GT Berlinetta Lusso,Ferrari 250 GT,250 GT,0,1962,Italy,Legendary,Rare Classics,114
+1586,Lincoln,Continental,Continental '62,,2,1962,USA,,Rods and Customs,80
+1587,Mazda,Cosmo 110S Series II,Mazda Cosmo,Cosmo,0,1972,Japan,,Classic Sports Cars,57
+1591,Peugeot,205 Turbo 16,Peugeot 205 T16,,0,1984,France,Barn Find,Retro Rally,110
+1598,BMW,M3 GTS,BMW E92 M3 GTS,,0,2010,Germany,Rare,Retro Super Saloons,63
+1599,Ferrari,599XX Evolution,Ferrari 599XX E,,0,2012,Italy,,Extreme Track Toys,90
+1601,Lamborghini,Gallardo LP570-4 Spyder Performante,Gallardo Spyder,Gallardo Spyder,0,2012,Italy,Epic,Modern Supercars,90
+1607,Audi,RS 4 Avant,Audi RS 4 '13,RS 4,0,2013,Germany,Common,Retro Super Saloons,61
+1627,Mercedes,G 65 AMG,M-B G 65,,0,2013,Germany,Rare,Pickups & 4x4s,96
+1650,Honda,Civic Si,Honda Civic '86,,0,1986,Japan,Epic,Extreme Track Toys,45
+1651,Ariel,Atom 500 V8,Ariel Atom,Atom,0,2013,UK,Epic,Extreme Track Toys,42
+1654,Ford,Mustang Shelby GT500,Ford Mustang '13,GT500,1,2013,USA,Rare,Modern Muscle,61
+1655,Subaru,BRZ,SUBARU BRZ,,0,2013,Japan,Common,Modern Sports Cars,50
+1658,Mercedes,A 45 AMG,M-B A45,,0,2013,Germany,Rare,Super Hot Hatch,56
+1661,Lancia,Delta S4,Lancia Delta S4,Delta,2,1986,Italy,Rare,Retro Rally,74
+1662,Mini,Cooper S,MINI '65,,2,1965,UK,Rare,Classic Rally,50
+1667,McLaren,P1,McLaren P1,,2,2013,UK,Legendary,Hypercars,72
+1668,Ford,Mustang Boss 302,Ford Mustang '69,Mustang 302,1,1969,USA,Rare,Classic Muscle,76
+2002,Nissan,GT-R Black Edition (R35),Nissan GT-R '12,GT-R Black Edition,1,2012,Japan,Rare,Modern Supercars,74
+2003,Mini,John Cooper Works GP,MINI JCW '12,JCW GP,2,2012,UK,Rare,Hot Hatch,50
+2004,Mazda,MX-5,Mazda MX-5 '13,,0,2013,Japan,Common,Retro Sports Cars,50
+2006,Chevrolet,Corvette ZR-1,Corvette '95,,0,1995,USA,Epic,Classic Muscle,67
+2007,Toyota,86,Toyota 86,,2,2013,Japan,Rare,Modern Sports Cars,50
+2009,Audi,RS 7 Sportback,Audi RS 7,,0,2013,Germany,Epic,Modern Super Saloons,75
+2010,Audi,R8 Coupé V10 Plus 5.2 FSI quattro,Audi R8 '13,R8 V10 Plus,0,2013,Germany,,Modern Supercars,75
+2017,Abarth,595 Esseesse,Abarth 595 '68,,2,1968,Italy,Common,Cult Cars,25
+2019,Ford,Focus RS,Ford Focus '03,,0,2003,USA,Rare,Rally Monsters,50
+2034,Ferrari,LaFerrari,LaFerrari,,1,2013,Italy,Legendary,Hypercars,85
+2038,Alfa Romeo,4C,Alfa Romeo 4C,,2,2014,Italy,Epic,Modern Sports Cars,40
+2040,BAC,Mono,BAC Mono,,2,2014,UK,Epic,Track Toys,35
+2042,Lamborghini,Veneno,Lambo Veneno,,0,2013,Italy,Legendary,Hypercars,90
+2119,Honda,Civic CRX Mugen,Honda Civic '84,,0,1984,Japan,,Retro Sports Cars,45
+2121,Honda,Prelude Si,Honda Prelude 94,Prelude,0,1994,Japan,Common,Retro Hot Hatch,60
+2128,Cadillac,XTS Limousine,Caddy Limo,Limo,2,2013,USA,Rare,Modern Super Saloons,76
+2131,HSV,GEN-F GTS,HSV GEN-F GTS,,2,2014,Australia,Rare,Modern Muscle,71
+2133,BMW,i8,BMW i8,,2,2015,Germany,Rare,Modern Sports Cars,42
+2140,Subaru,BRAT GL,SUBARU BRAT,Brat,2,1980,Japan,Common,Utility Heroes,60
+2142,Volkswagen,Golf R,VW Golf R '14,,0,2014,Germany,Rare,Super Hot Hatch,55
+2145,Ford,Ranger T6 Rally Raid,Ford Ranger T6,Ranger,2,2014,USA,,Offroad,450
+2147,MG,Metro 6R4,MG Metro 6R4,Metro,2,1986,UK,Legendary,Rally Monsters,104
+2148,Mini,X-Raid All4 Racing Countryman,MINI X-Raid,X-Raid,2,2013,UK,Epic,Offroad,385
+2149,Renault,Clio Williams,Renault Clio '93,,0,1993,France,Common,Retro Hot Hatch,50
+2151,Volkswagen,Type 2 De Luxe,VW Type 2,Samba bus,2,1963,Germany,Rare,Cult Cars,40
+2154,BMW,M4 Coupé,BMW M4 '14,M4,0,2014,Germany,Rare,Modern Super Saloons,60
+2161,Alfa Romeo,Giulia TZ2,Alfa Romeo TZ2,,0,1965,Italy,,Classic Racers,100
+2163,Honda,Civic Type R,Honda Civic '16,,0,2016,Japan,Common,Retro Hot Hatch,47
+2164,Lamborghini,Huracán LP 610-4,Lambo Huracán,Huracán,0,2014,Italy,Epic,Modern Supercars,83
+2168,Subaru,WRX STI,SUBARU WRX '15,,0,2015,Japan,Common,Modern Rally,60
+2171,Mazda,Mazdaspeed MX-5,Mazda MX-5 '05,,1,2005,Japan,Common,Retro Sports Cars,50
+2175,Lexus,RC F,Lexus RC F,,2,2015,USA,Rare,Modern Super Saloons,66
+2177,Chevrolet,Corvette Z06,Corvette '15,,0,2015,USA,Legendary,Classic Sports Cars,70
+2178,Audi,RS 4 Avant,Audi RS 4 '01,RS 4,0,2001,Germany,Common,Retro Super Saloons,62
+2179,Audi,S1,Audi S1,,2,2015,Germany,Legendary,Rally Monsters,45
+2180,Audi,RS 6 Avant,Audi RS 6 '15,RS 6,0,2015,Germany,Rare,Modern Super Saloons,75
+2183,Chevrolet,Camaro Z/28,Chevy Camaro '15,Camaro,0,2015,USA,Rare,Track Toys,72
+2184,Ferrari,458 Speciale,Ferrari 458 S,,0,2013,Italy,Epic,Track Toys,86
+2188,Koenigsegg,One:1,Koenigsegg One,,2,2015,Sweden,,Hypercars,74
+2205,Honda,S800,Honda S800,,2,1970,Japan,Common,Cult Cars,35
+2216,Plymouth,Fury,Plymouth Fury,,0,1958,USA,Rare,Rods and Customs,76
+2217,Subaru,SVX,SUBARU SVX,,0,1996,Japan,Common,Retro Sports Cars,70
+2242,Mercedes,GT S,M-B AMG GT,,0,2015,Germany,Rare,Super GT,75
+2262,Cadillac,ATS-V,Caddy ATS-V,,2,2016,USA,Common,Modern Muscle,61
+2263,Dodge,Challenger SRT Hellcat,Challenger '15,Hellcat,0,2015,USA,Rare,Modern Muscle,70
+2267,Mazda,MX-5,Mazda MX-5 '16,,0,2016,Japan,Common,Retro Sports Cars,45
+2270,Nissan,Skyline H/T 2000GT-R,Nissan GT-R '73,Skyline,2,1973,Japan,,Classic Sports Cars,55
+2272,Datsun,2000 Roadster,Datsun 2000,,2,1969,Japan,,Classic Sports Cars,36
+2290,Porsche,918 Spyder,Porsche 918,,0,2014,Germany,Legendary,Hypercars,70
+2297,Porsche,911 GT3 RS 4.0,911 GT3 RS4 '12,911 GT3 RS,0,2012,Germany,Epic,Track Toys,90
+2357,Ford,Focus RS,Ford Focus '17,,0,2017,USA,Rare,Rally Monsters,47
+2363,Ford,GT,Ford GT '17,,2,2017,USA,Epic,Unlimited Offroad,58
+2371,Ferrari,FXX K,Ferrari FXX K,,0,2014,Italy,Legendary,Extreme Track Toys,85
+2372,Ford,De Luxe Five-Window Coupé,Ford Coupé '32,De Luxe,2,1932,USA,Common,Rods and Customs,53
+2400,Ford,Mustang Shelby GT350R,Ford GT350R '16,,1,2016,USA,Rare,Track Toys,61
+2412,BMW,Isetta 300 Export,BMW Isetta,Isetta,2,1957,Germany,Common,Cult Cars,13
+2416,Meyers,Manx,Meyers Manx,,2,1971,USA,Epic,Buggies,20
+2420,Opel,Manta 400,Opel Manta 400,Manta,2,1984,Germany,Rare,Rally Monsters,50
+2421,Cadillac,CTS-V Sedan,Caddy CTS-V '16,CTS-V,0,2016,USA,Common,Modern Muscle,72
+2422,HSV,Limited Edition Gen-F GTS Maloo,HSV Maloo '14,Maloo,2,2014,Australia,Common,Utility Heroes,71
+2430,Ariel,Nomad,Ariel Nomad,,2,2016,UK,Rare,Unlimited Buggies,50
+2467,Ferrari,488 GTB,Ferrari 488 GTB,,0,2015,Italy,Epic,Modern Supercars,78
+2468,Dodge,Charger SRT Hellcat,Dodge Charger 15,Charger Hellcat,0,2015,USA,Rare,Modern Muscle,70
+2469,Toyota,Sports 800,Sports 800 '65,,0,1965,Japan,,Classic Sports Cars,30
+2470,Aston Martin,Vulcan,AM Vulcan,,0,2016,UK,Legendary,Extreme Track Toys,120
+2471,Mercedes,C 63 S Coupé,M-B AMG C 63 '16,C 63,0,2016,Germany,Rare,Modern Super Saloons,66
+2472,McLaren,570S Coupé,McLaren 570S,,2,2015,UK,Epic,Modern Supercars,72
+2473,Audi,R8 V10 Plus,Audi R8 V10 plus,,0,2016,Germany,,Modern Supercars,73
+2486,Radical,RXC Turbo,Radical RXC,,2,2015,UK,Epic,Extreme Track Toys,70
+2489,Abarth,695 Biposto,Abarth 695 '16,,2,2016,Italy,,Hot Hatch,35
+2494,Range Rover,Sport SVR,Range Rover '15,SVR,2,2015,UK,Rare,Sports Utility Heroes,105
+2507,Chevrolet,150 Utility Sedan,Chevy 150 Sedan,150,2,1955,USA,Common,Rods and Customs,60
+2512,Nissan,Skyline GTS-R,Nissan GT-R '87,,1,1987,Japan,Legendary,Retro Racers,78
+2515,Penhall,The Cholla,Penhall Cholla,,2,2011,USA,Rare,Unlimited Buggies,
+2517,Ford,#11 Rockstar F-150 Trophy Truck,#11 Ford F-150,F-150 Trophy,1,2014,USA,Epic,Unlimited Offroad,350
+2526,Koenigsegg,Regera,Regera,,0,2016,Sweden,Legendary,Hypercars,82
+2527,Aston Martin,DB11,AM DB11,,2,2017,UK,Epic,Super GT,78
+2534,Porsche,968 Turbo S,Porsche 968,,2,1993,Germany,Rare,Retro Sports Cars,74
+2535,Porsche,928 GTS,Porsche 928 GTS,,0,1993,Germany,Rare,Retro Sports Cars,86
+2542,Alfa Romeo,Giulia Quadrifoglio,Alfa Giulia '17,,0,2017,Italy,Rare,Modern Super Saloons,58
+2544,Dodge,Viper ACR,Dodge Viper '16,,0,2016,USA,,Track Toys,70
+2549,Porsche,#3 917 LH,Porsche 917 LH,917 LH,2,1970,Germany,Legendary,Classic Racers,120
+2551,Ford,FPV Limited Edition Pursuit Ute,Ford Ute '14,FPV Ute,0,2014,USA,Common,Utility Heroes,80
+2552,Alumicraft,Class 10 Race Car,Alumi Craft C.10,Class 10,2,2015,USA,Epic,Unlimited Buggies,120
+2563,Reliant,Supervan III,Reliant Supervan,Supervan,0,1972,UK,Common,Utility Heroes,27
+2566,Toyota,FJ40,Toyota FJ40,,0,1979,Japan,Common,Pickups & 4x4s,62
+2568,Volkswagen,Class 5/1600 Baja Bug,VW Class 5 Bug,Baja Bug,0,1969,Germany,Rare,Buggies,55
+2569,Ultima,Evolution Coupé 1020,Ultima 1020,Evolution 1020,2,2015,UK,Epic,Extreme Track Toys,78
+2574,AMG TD,M12S Warthog CST,M12S Warthog CST,Warthog,1,2554,USA,Legendary,Unlimited Offroad,40
+2577,Ferrari,F12tdf,Ferrari F12tdf,,2,2015,Italy,Epic,Super GT,92
+2613,GMC,Jimmy,GMC K5 Jimmy,,0,1970,USA,Common,Pickups & 4x4s,68
+2614,Ford,Mustang GT 2+2 Fastback,Ford Mustang '68,Mustang GT,1,1968,USA,Legendary,Classic Muscle,61
+2616,Lamborghini,Centenario LP 770-4,Lambo Centenario,Centenario,0,2016,Italy,Legendary,Hypercars,90
+2618,Nissan,GT-R (R35),Nissan GT-R '17,GT-R,0,2017,Japan,Rare,Modern Supercars,74
+2625,Bentley,Bentayga,Bentley Bentayga,,0,2016,UK,,Sports Utility Heroes,85
+2628,BMW,M4 GTS,BMW M4 '16,M4,0,2016,Germany,Rare,Modern Super Saloons,60
+2636,Toyota,#1 T100 Baja Truck,#1 Toyota T100,Baja,0,1993,Japan,Legendary,Unlimited Offroad,100
+2647,Pagani,Huayra BC Coupé,Pagani Huayra BC,Huayra,0,2016,Italy,Legendary,Hypercars,74
+2649,Ford,Crown Victoria Police Interceptor,Crown Victoria,Crown Vic,1,2010,USA,Common,Retro Muscle,72
+2652,Mitsubishi,Montero Evolution,Montero Evo,Montero,0,1997,Japan,,Pickups & 4x4s,75
+2654,Mercedes,GT R,M-B AMG GTR,,0,2017,Germany,,Super GT,65
+2659,Nissan,Silvia K's Aero,Silvia '98,Silvia,0,1998,Japan,Common,Retro Sports Cars,65
+2663,Polaris,#37 Polaris RZR Pro 2 Truck,#37 Pro 2 Truck,Pro 2 Truck,2,2016,USA,Epic,Unlimited Offroad,65
+2711,Traffic,3 Traffic,Mazda Traffic,,0,,,,,
+2712,Traffic,Galant Traffic,Galant Traffic,,0,,,,,
+2713,Traffic,Box Truck,Box Traffic,,0,,,,,
+2714,Traffic,Bus,Bus Traffic,,0,,,,,
+2738,Nissan,NISMO GT-R LM,Nissan GT-R '95,,1,1995,Japan,Legendary,Retro Sports Cars,65
+2739,Chevrolet,Camaro ZL1,Chevy Camaro '17,,0,2017,USA,Rare,Modern Muscle,72
+2742,Jeep,Trailcat,Jeep Trailcat,,0,2016,USA,Rare,Unlimited Offroad,68
+2743,Toyota,Land Cruiser Arctic Trucks AT37,Toyota AT37,Arctic Truck,0,2016,Japan,,Pickups & 4x4s,87
+2745,Honda,Ridgeline Baja Trophy Truck,Honda Trophy '15,Ridgeline,0,2015,Japan,Epic,Unlimited Offroad,265
+2755,Porsche,911 GT2 RS,911 GT2 RS '18,,0,2018,Germany,,Retro Supercars,68
+2773,Porsche,Cayenne Turbo,Porsche Cayenne,,0,2018,Germany,Epic,Sports Utility Heroes,100
+2792,Ford,#2 GT40 Mk II,#2 Ford GT40,GT40,2,1966,USA,Legendary,Classic Racers,160
+2793,Ferrari,#24 Ferrari Spa 330 P4,#24 Ferrari P4,330 P4,2,1967,Italy,Legendary,Classic Racers,114
+2794,Porsche,911 Turbo S Leichtbau,P. 911 Turbo '93,,0,1993,Germany,,Retro Sports Cars,79
+2801,Nissan,#11 Tomica Skyline Turbo Super Silhouette,Nis. #11 Skyline,Super Silhouette,2,1983,Japan,,Retro Racers,100
+2822,Nissan,Safari Turbo,Nissan Safari,,2,1985,Japan,Treasure Car,Pickups & 4x4s,82
+2825,Lotus,Elise GT1,Lotus Elise GT1,,0,1997,UK,Legendary,Retro Supercars,100
+2841,Jeep,Grand Cherokee Trackhawk,Jeep Trackhawk,Trackhawk,2,2018,USA,Common,Sports Utility Heroes,93
+2870,Honda,Civic Type R,Honda Civic '18,,0,2018,Japan,Common,Retro Hot Hatch,47
+2871,Can-Am,Maverick X RS Turbo R,Can-Am Maverick,Maverick,2,2018,Canada,Common,UTVs,40
+2872,Hyundai,Veloster N,Veloster N,,0,2019,Korea,Epic,Super Hot Hatch,50
+2902,Traffic,Flatbed,Flatbed Traffic,,0,,,,,
+2903,Traffic,LEGACY B4 2.0 GT Traffic,Legacy Traffic,Legacy,0,,,,,
+2909,Dodge,Challenger SRT Demon,Dodge SRT Demon,,1,2018,USA,Rare,Modern Muscle,70
+2910,Koenigsegg,Agera RS,Agera RS,,0,2017,Sweden,Legendary,Hypercars,82
+2935,Funco,F9,Funco F9,,2,2018,USA,,Unlimited Buggies,120
+2937,Ford,#14 Rahal Letterman Lanigan Racing Fiesta,#14 Ford Fiesta,Racing Fiesta,0,2017,USA,Epic,Rally Monsters,28
+2968,Aston Martin,Valkyrie,AM Valkyrie,,0,2023,UK,Legendary,Hypercars,70
+2974,Ferrari,812 Superfast,Ferrari 812,,0,2017,Italy,Legendary,Super GT,92
+2986,Mercedes,Unimog U5023,M-B Unimog,Unimog,1,2014,Germany,Rare,Offroad,160
+2987,Peel,P50,Peel P50,,2,1962,UK,Legendary,Cult Cars,7
+2992,Jaguar,Lightweight E-Type,Jaguar LW E-Type,E-Type,0,1964,UK,Legendary,Classic Racers,64
+2993,TVR,Griffith,TVR Griffith,,2,2018,UK,Rare,Modern Sports Cars,60
+2995,Volkswagen,Golf GTI,VW Golf GTI '83,,0,1983,Germany,Common,Retro Hot Hatch,40
+2996,Ford,#13 Ford Mustang,#13 Ford Mustang,Mustang,0,2015,USA,,Drift Cars,100
+2997,HSV,#530 HSV Maloo GEN-F,#530 HSV Maloo,Maloo,0,2014,Australia,Common,Utility Heroes,71
+3000,Nissan,#777 Nissan 240SX,#777 Nissan 240,240SX,2,1993,Japan,,Retro Sports Cars,60
+3003,Dodge,#43 Dodge Viper SRT-10 ACR,#43 Dodge Viper,Viper ACR,0,2006,USA,Rare,Track Toys,70
+3007,Volkswagen,#34 Andretti Rally Cross Beetle,#34 VW Beetle,Rally Beetle,0,2017,Germany,Epic,Rally Monsters,
+3031,Porsche,#185 959 Prodrive Rally Raid,#185 Porsche 959,959 Rally,2,1985,Germany,Legendary,Rally Monsters,210
+3035,KTM,X-Bow GT4,KTM X-Bow GT4,,0,2018,Austria,Epic,Extreme Track Toys,120
+3037,BMW,#98 BMW 325i,#98 BMW 325i,325i,2,1989,USA,Epic,Drift Cars,63
+3051,Ford,M-Sport Fiesta RS,Ford Fiesta RS,Fiesta RS,0,2017,USA,,Rally Monsters,80
+3055,Jaguar,C-X75,Jaguar C-X75,,2,2010,UK,Legendary,Modern Supercars,60
+3062,Ferrari,512 S,Ferrari 512 S,,2,1970,Italy,Legendary,Classic Racers,120
+3063,Mercedes,X-Class,M-B X-Class,,0,2018,Germany,Common,Pickups & 4x4s,73
+3064,Mercedes,GT 4-Door Coupé,M-B GT 4 '18,GT 4,2,2018,Germany,,Modern Super Saloons,80
+3072,Porsche,911 GT3 RS,911 GT3 RS '19,,0,2019,Germany,Rare,Retro Supercars,90
+3082,Maserati,MC12 Versione Corsa,MC12 Corsa '08,MC12 Corsa,2,2008,Italy,Legendary,Extreme Track Toys,115
+3087,McLaren,650S Spider,650S Spider,,0,2014,UK,Epic,Modern Supercars,72
+3088,Chevrolet,Chevrolet Silverado 1500 Drift Truck,Silverado DD,Silverado,0,2018,USA,Epic,Drift Cars,110
+3091,Aston Martin,Vantage,AM Vantage '19,,0,2019,UK,Epic,GT Cars,73
+3107,Mercedes,G 63 AMG 6x6,M-B G 63 6x6,G 63 6x6,0,2014,Germany,,Pickups & 4x4s,159
+3108,Ford,Mustang RTR Spec 5,Ford Mustang S5,Mustang RTR,1,2018,USA,Rare,Modern Muscle,61
+3110,Jeep,Wrangler Unlimited,Jeep Wrangler DD,Wrangler,0,2013,USA,Common,Pickups & 4x4s,85
+3117,Porsche,718 Cayman GTS,Porsche 718 GTS,Cayman GTS,1,2018,Germany,Epic,Track Toys,64
+3118,Chevrolet,Corvette ZR1,Corvette '19,,0,2019,USA,Legendary,Classic Sports Cars,70
+3120,Lamborghini,Urus,Urus '19,,0,2019,Italy,Rare,Sports Utility Heroes,85
+3123,Porsche,911 Carrera S,Porsche 911 '19,,0,2019,Germany,Rare,Modern Sports Cars,64
+3128,Ford,#25 'Brocky' Ultra4 Bronco RTR,#25 Ford Bronco,Bronco,0,2017,USA,Epic,Unlimited Offroad,150
+3129,Renault,Mégane R26.R,Mégane R26.R,Mégane,0,2008,France,Rare,Hot Hatch,60
+3132,Mini,X-Raid John Cooper Works Buggy,MINI JCW Buggy,Buggy,2,2018,UK,,Offroad,325
+3134,Renault,Mégane R.S.,Mégane R.S. '18,,0,2018,France,Rare,Hot Hatch,50
+3141,Apollo,Intensa Emozione,Apollo IE '19,,0,2019,Germany,,Extreme Track Toys,100
+3149,Chevrolet,Camaro ZL1 1LE,Chevy Camaro '18,Camaro ZL1,0,2018,USA,Rare,Track Toys,72
+3153,McLaren,600LT Coupé,McLaren 600LT,,0,2018,UK,Epic,Track Toys,72
+3156,McLaren,Speedtail,Speedtail '19,,0,2019,UK,Legendary,Hypercars,72
+3170,Ford,Supervan 3,Ford Supervan 3,,0,1994,USA,Epic,Track Toys,200
+3173,BMW,Z4 Roadster,BMW Z4 '19,,0,2019,Germany,Rare,Modern Sports Cars,52
+3176,Mercedes,AMG Hammer Coupé,AMG Hammer Coupé,Hammer,1,1987,Germany,Common,Retro Super Saloons,70
+3180,Peugeot,205 Rallye,Peugeot 205 R,,0,1991,France,Rare,Retro Hot Hatch,50
+3184,Ford,#5 Escort RS1800 MkII,#5 Escort '77,Escort RS1800,0,1977,USA,Epic,Classic Rally,41
+3185,Aston Martin,DBS Superleggera,AM DBS SL '19,,0,2019,UK,,Super GT,78
+3187,Porsche,Macan LPR Rally Raid,Porsche Macan RR,Macan Rally,0,2018,Germany,Epic,Offroad,400
+3189,Hennessey,Ford F-150 VelociRaptor 6X6,VelociRaptor '19,VelociRaptor,1,2019,USA,Legendary,Pickups & 4x4s,136
+3190,Ford,F-150 SVT Lightning,Ford Lightning,F-150 Lightning,1,2003,USA,Common,Pickups & 4x4s,95
+3211,Aston Martin,Vulcan AMR Pro,AM Vulcan AMR,,0,2017,UK,Legendary,Extreme Track Toys,120
+3212,Zenvo,TSR-S,Zenvo TSR-S,,2,2019,Denmark,Legendary,Hypercars,69
+3214,Porsche,#70 Porsche Motorsport 935,#70 Porsche 935,935,2,2019,Germany,Legendary,Extreme Track Toys,115
+3225,Ferrari,Portofino,Portofino '18,,0,2018,Italy,Epic,Super GT,80
+3226,Ferrari,J50,Ferrari J50 '17,,2,2017,Italy,Rare,Modern Supercars,78
+3227,Ferrari,488 Pista,488 Pista '19,,0,2019,Italy,Epic,Track Toys,78
+3228,Ford,Racing Puma,Ford Racing Puma,,0,1999,USA,Rare,Retro Rally,55
+3232,Chevrolet,#777 Chevrolet Corvette,#777 Corvette,Corvette,0,2013,USA,Legendary,Classic Sports Cars,78
+3235,Volkswagen,Pickup LX,VW Pickup '82,Pickup,2,1982,Germany,Epic,Utility Heroes,60
+3241,Subaru,WRX STI ARX Supercar,SUBARU STI ARX,STI ARX,2,2018,Japan,Epic,Rally Monsters,30
+3249,Ferrari,#117 599 GTB Fiorano,Formula D 599,Fiorano,0,2007,USA,Epic,Drift Cars,105
+3250,Mercedes,E 63 S,Mercedes-AMG E63,,0,2018,Germany,Epic,Modern Super Saloons,80
+3255,Jeep,JT,Jeep JT,,2,2020,USA,Common,Pickups & 4x4s,83
+3257,Nissan,Pulsar GTI-R,Nissan Pulsar,,0,1990,Japan,Rare,Retro Rally,50
+3277,Ford,Mustang Shelby GT500,Ford GT500 '20,,1,2020,USA,Rare,Modern Muscle,61
+3287,Jaguar,Sport XJR-15,Jaguar XJR-15,XJR-15,2,1991,UK,Legendary,Retro Supercars,105
+3288,Schuppan,962CR,Schuppan 962CR,,2,1993,UK,,Retro Supercars,120
+3289,Lamborghini,Aventador SVJ,Aventador SVJ,,0,2018,Italy,Legendary,Hypercars,85
+3293,Jaguar,XJ220S TWR,Jaguar XJ220S,,0,1993,UK,Rare,Retro Supercars,100
+3307,Nissan,370Z Nismo,Nissan 370Z '19,,0,2019,Japan,Rare,Modern Sports Cars,72
+3311,Ferrari,FXX-K Evo,Ferrari FXX-K E,,0,2018,Italy,Legendary,Extreme Track Toys,86
+3312,Ferrari,Monza SP2,Ferrari Monza,,0,2019,Italy,Legendary,Super GT,90
+3315,Koenigsegg,Jesko,Koenigsegg Jesko,,2,2020,Sweden,Legendary,Hypercars,72
+3318,Audi,RS 4 Avant,RS 4 Avant '18,RS 4,0,2018,Germany,Common,Retro Super Saloons,58
+3359,Audi,RS e-tron GT,Audi RS e-tron,,0,2021,Germany,Epic,Modern Super Saloons,97
+3363,Nissan,#23 Pennzoil NISMO Skyline GT-R,Nis. #23 GT-R,Pennzoil GT-R,0,1998,Japan,,Retro Racers,100
+3364,Aston Martin,Valhalla Concept Car,Valhalla Concept,Valhalla,0,2019,UK,,Hypercars,65
+3367,Ferrari,F8 Tributo,F8 Tributo '19,,0,2019,Italy,,Modern Supercars,78
+3369,Chevrolet,Corvette Stingray Coupé,Corvette C8 '20,,0,2020,USA,,Classic Muscle,70
+3371,Lamborghini,Huracán EVO,Huracán EVO,,0,2020,Italy,,Modern Supercars,83
+3373,Toyota,4Runner TRD Pro,Toyota 4Runner,4Runner,0,2019,Japan,Rare,Pickups & 4x4s,87
+3374,Toyota,Tacoma TRD Pro,Toyota Tacoma,Tacoma,0,2019,Japan,Rare,Pickups & 4x4s,80
+3395,Renault,8 Gordini,Renault 8,Gordini,0,1967,France,,Classic Rally,63
+3400,Mazda,#99 Mazda RX-8,#99 Mazda RX-8,RX-8,0,2009,USA,Epic,Drift Cars,50
+3402,Toyota,GR Supra,Toyota Supra '20,Supra,0,2020,Japan,Rare,Modern Sports Cars,52
+3404,Ford,#2069 Ford Performance Bronco R,#2069 Bronco R,Bronco R,0,2020,USA,Epic,Offroad,265
+3411,Toyota,#34 Toyota Supra MkIV,#34 Toyota Supra,Supra,0,2020,Japan,Rare,Modern Sports Cars,
+3412,Subaru,STI S209,SUBARU STI S209,,0,2019,Japan,,Modern Rally,60
+3413,Volkswagen,Golf R,VW Golf R '21,,0,2021,Germany,Rare,Super Hot Hatch,50
+3414,Land Rover,Defender 110 X,LR Defender '20,Defender,0,2020,UK,Common,Sports Utility Heroes,90
+3434,BMW,M2 Competition Coupé,BMW M2 Comp,M2,0,2020,Germany,Epic,Modern Super Saloons,52
+3439,DeBerti,"Ford Super Duty F-250 Lariat ""Transformer""",DeBerti F-250,F-250,0,2019,USA,Epic,Unlimited Offroad,170
+3441,Toyota,Toyota Tacoma TRD 'The Performance Truck',DD Tacoma TRD,Tacoma,0,2019,USA,Common,Drift Cars,
+3445,Porsche,Taycan Turbo S,Porsche Taycan S,Taycan,0,2020,Germany,Common,Modern Super Saloons,97
+3449,Lotus,Evija,Lotus Evija '20,,2,2020,UK,Legendary,Hypercars,93
+3454,Audi,RS 3 Sedan,Audi RS 3 '20,RS 3,0,2020,Germany,Rare,Modern Super Saloons,55
+3476,Ford,Super Duty F-450 DRW PLATINUM,Ford SD F-450,F-450,2,2020,USA,Common,Pickups & 4x4s,180
+3477,Chevrolet,Silverado LT Trail Boss,Chevy Trail Boss,Silverado,0,2020,USA,Rare,Pickups & 4x4s,91
+3482,McLaren,765LT Coupé,McL. 765 '21,,0,2021,UK,Epic,Track Toys,72
+3486,Traffic,Wrangler Rubicon Traffic,Wrangler T,,0,,,,,
+3498,Saleen,S7 LM,Saleen S7 LM,,2,2017,USA,,Extreme Track Toys,72
+3518,BMW,M8 Competition Coupé,BMW M8 Comp,M8 Competition,0,2020,Germany,Rare,GT Cars,76
+3520,Lexus,LC 500,Lexus LC 500 '21,,2,2021,USA,Rare,GT Cars,82
+3523,Toyota,#151 Toyota GR Supra,#151 FD Supra,Supra,0,2020,Japan,Rare,Modern Sports Cars,
+3524,Toyota,#411 Toyota Corolla Hatchback,#411 FD Corolla,Corolla,0,1974,Japan,,Classic Sports Cars,
+3533,Volkswagen,Golf R,VW Golf R '22,,0,2022,Germany,Rare,Super Hot Hatch,55
+3534,Mini,John Cooper Works GP,MINI JCW GP '21,JWC GP,2,2021,UK,Rare,Hot Hatch,44
+3539,Sierra,#23 Yokohama ALPHA,#23 SIERRA ALPHA,Alpha,2,2020,USA,Epic,Extreme Track Toys,25
+3540,Sierra,RX3,SIERRA RX3,,2,2021,USA,Rare,UTVs,28
+3543,Pagani,Huayra R,Huayra R '22,,0,2021,Italy,Legendary,Extreme Track Toys,74
+3548,Wuling,Sunshine S,Wuling Sunshine,,0,2013,China,Rare,Utility Heroes,50
+3549,Alumicraft,#122 Class 1 Buggy,#122 AC Class 1,Buggy,2,2021,USA,Epic,Unlimited Buggies,120
+3551,BMW,#91 BMW M2,#91 BMW M2,M2,0,2023,USA,Epic,Drift Cars,52
+3554,Mitsubishi,#1 Sierra Sierra Enterprises Lancer Evolution Time Attack,#1 Evolution TA,Evo Time Attack,0,2005,Japan,,Extreme Track Toys,106
+3580,Aston Martin,DBX,AM DBX '21,,2,2021,UK,,Sports Utility Heroes,85
+3583,Audi,RS 6 Avant,Audi RS 6 '21,RS 6,0,2021,Germany,Rare,Modern Super Saloons,73
+3584,Audi,RS 7 Sportback,Audi RS 7 '21,RS 7,0,2021,Germany,Epic,Modern Super Saloons,73
+3590,Chevrolet,K-10 Custom,Chevy K10 '72,,2,1972,USA,Common,Pickups & 4x4s,76
+3594,Ferrari,Roma,Ferrari Roma,,0,2020,Italy,,Super GT,80
+3595,Ferrari,SF90 Stradale,SF90 Stradale,,0,2020,Italy,Legendary,Hypercars,68
+3597,Ford,F-150 XLT Lariat,Ford F-150 '86,F-150 ,0,1986,USA,Common,Pickups & 4x4s,72
+3599,GMA,T.50,GMA T.50,,2,2020,UK,Legendary,Hypercars,80
+3600,Hennessey,Venom F5,Venom F5,Venom,2,2021,USA,Legendary,Hypercars,90
+3603,Casey Currie,"#4402 Ultra 4 ""Trophy Jeep""",#4402 Ultra 4,Jeep,0,2019,USA,,Unlimited Offroad,280
+3604,Jimco,#179 Hammerhead Class 1,#179 Hammerhead,Hammerhead,2,2020,USA,Rare,Unlimited Buggies,227
+3605,Jimco,#240 Fastball Racing Class 6100 Spec Trophy Truck,#240 Jimco TT,Trophy Truck,2,2019,USA,Epic,Unlimited Offroad,303
+3606,Lamborghini,Essenza SCV12,Lambo SCV12,Essenza,0,2020,Italy,Legendary,Extreme Track Toys,92
+3608,Lamborghini,Sián Roadster,Lambo Sián R,,0,2020,Italy,,Modern Supercars,85
+3611,Maserati,MC20,Maserati MC20,,0,2022,Italy,Epic,Modern Supercars,60
+3616,Mercedes,GT Black Series,AMG GT Black,,0,2020,Germany,Epic,Track Toys,75
+3617,Mercedes,SL 63,M-AMG SL 63 '21,,0,2021,Germany,Rare,GT Cars,70
+3622,Nissan,GT-R NISMO (R35),Nissan GTR '20,GT-R Nismo,0,2020,Japan,Epic,Track Toys,74
+3625,Rimac,Nevera,Rimac Nevera,,0,2021,Croatia,Legendary,Hypercars,110
+3629,Toyota,GR Yaris,Toyota GR Yaris,,0,2021,Japan,Epic,Modern Rally,50
+3631,Aston Martin,Valkyrie AMR Pro,AM Valkyrie AMR,,0,2022,UK,Legendary,Extreme Track Toys,73
+3645,BMW,M4 Competition Coupé,BMW M4 '21,M4 Competition,0,2021,Germany,Rare,Modern Super Saloons,59
+3650,Mercedes,Mercedes-AMG ONE,Mercedes-AMG ONE,,1,2021,Germany,Legendary,Hypercars,55
+3655,McLaren,620R,McLaren 620R,,2,2021,UK,,Track Toys,72
+3657,RIVIAN,R1T,RIVIAN R1T,,2,2022,USA,Epic,Pickups & 4x4s,141
+3661,Lotus,Exige Cup 430,Lotus Exige '18,Exige Cup,0,2018,UK,,Track Toys,48
+3662,Polaris,#37 Polaris RZR Pro 4 Truck,#37 Pro 4 Truck,RZR,2,2021,USA,,Unlimited Offroad,50
+3665,SIERRA,700R,SIERRA 700R,,2,2021,USA,Rare,UTVs,30
+3667,Porsche,911 GT3,911 GT3 '21,,1,2021,Germany,Rare,Retro Supercars,64
+3668,McLaren,Artura,McL. Artura '23,,2,2023,UK,Epic,Modern Supercars,65
+3670,Ford,#4 Ford Focus RS,#4 Ford Focus,Focus RS,0,2001,USA,Rare,Rally Monsters,80
+3672,Lamborghini,Huracán STO,Huracán STO,,0,2020,Italy,Legendary,Track Toys,80
+3678,Hyundai,i30 N,Hyundai i30 N,,0,2020,Korea,Rare,Super Hot Hatch,50
+3686,Polaris,RZR Pro XP Factory Racing Limited Edition,RZR Racing,RZR Racing,2,2021,USA,Rare,UTVs,45
+3687,Polaris,RZR Pro XP Ultimate,Polaris RZR Pro,RZR Pro,2,2021,USA,Rare,UTVs,45
+3692,Ford,F-150 Lightning,F-150 Lightning,,0,2022,USA,Epic,Pickups & 4x4s,98
+3693,Alumicraft,#6165 Trick Truck,#6165 Truck,Trick Truck,2,2022,USA,Epic,Unlimited Offroad,150
+3698,Porsche,Mission R,Porsche MissionR,,2,2021,Germany,Legendary,Extreme Track Toys,80
+3700,McLaren,Sabre,McL. Sabre '21,,2,2021,UK,,Hypercars,72
+3716,Lotus,Emira,Lotus Emira,,2,2023,UK,,Modern Sports Cars,60
+3719,Cadillac,CT4-V Blackwing,Cadillac CT4-V,,0,2022,USA,Rare,Modern Muscle,64
+3720,Cadillac,CT5-V Blackwing,Cadillac CT5-V,,0,2022,USA,Rare,Modern Muscle,64
+3722,HUMMER,EV Pickup,HUMMER EV Truck,,2,2022,USA,Epic,Pickups & 4x4s,175
+3724,Ferrari,296 GTB,Ferrari 296 GTB,,2,2022,Italy,Epic,Modern Supercars,65
+3726,Honda,Integra A-Spec,Integra '23,,0,2023,Japan,Epic,Extreme Track Toys,47
+3728,Bentley,Continental GT Convertible,Bentley Cont GTC,Continental GT,0,2021,UK,Rare,GT Cars,90
+3735,Subaru,BRZ,SUBARU BRZ '22,,2,2022,Japan,Common,Modern Sports Cars,50
+3736,Ford,Bronco Raptor,Bronco Raptor,,0,2022,USA,Epic,Pickups & 4x4s,79
+3737,BMW,iX xDrive50,BMW iX '22,iX,2,2022,Germany,Rare,Sports Utility Heroes,107
+3744,Nissan,#64 Forsberg Racing Nissan Z,#64 Nissan Z,Racing Z,2,2023,USA,Epic,Drift Cars,50
+3745,Audi,R8 V10 Performance,Audi R8 '20,R8 V10,0,2020,Germany,Rare,Modern Supercars,73
+3750,Mitsubishi,Montero Exceed 2800 TD,Montero '95,Montero,0,1995,Japan,Rare,Pickups & 4x4s,92
+3753,Lamborghini,Huracán Tecnica,Huracán Tecnica,Huracán,0,2022,Italy,Legendary,Modern Supercars,80
+3755,Ford,Supervan 4,Ford SuperVan 4,,0,2022,USA,,Extreme Track Toys,50
+3760,Porsche,718 Cayman GT4 RS,Cayman GT4 RS,Cayman GT4,1,2022,Germany,Epic,Track Toys,64
+3761,Toyota,GR86,Toyota GR86 '22,,0,2022,Japan,Common,Modern Sports Cars,50
+3763,BMW,M2,BMW M2 '23,,0,2023,Germany,Rare,Modern Super Saloons,52
+3764,BMW,M5 CS,BMW M5 '22,,0,2022,Germany,Rare,Modern Super Saloons,76
+3766,Chevrolet,Corvette Z06,Corvette Z06 '23,,0,2023,USA,Legendary,Classic Sports Cars,70
+3767,Acura,NSX Type S,Acura NSX '22,,0,2022,USA,Epic,Modern Supercars,59
+3771,Chevrolet,Corvette E-Ray,Corvette E-Ray,,1,2024,USA,Epic,Modern Supercars,70
+3773,Honda,Civic Type R,Honda Civic '23,,0,2023,Japan,Common,Retro Hot Hatch,47
+3774,Lamborghini,Countach LPI 800-4,L. Countach '21,Countach,0,2021,Italy,Legendary,Hypercars,70
+3775,Lamborghini,Aventador LP 780-4 Ultimae,L. Aventador '21,Aventador,0,2021,Italy,,Hypercars,85
+3781,Porsche,911 GT3 RS,P. 911 GT3 RS 23,,1,2023,Germany,Rare,Retro Supercars,64
+3783,Volkswagen,Rallye Golf,VW Rallye Golf,,0,1989,Germany,,Retro Rally,55
+3785,Toyota,Soarer 2.5 GT-T,Soarer '97,Soarer,0,1997,Japan,Rare,Retro Sports Cars,78
+3789,Wuling,Hongguang Mini EV,Wuling Mini EV,Mini EV,2,2022,China,Rare,Hot Hatch,17
+3795,Meyers,Manx 2.0,Meyers Manx 2.0,Manx,2,2023,USA,Epic,Buggies,40
+3798,Mazda,MX-5 Cup,MX-5 Cup '17,,0,2017,Japan,Epic,Track Toys,45
+3811,Lucid,Air Sapphire,Lucid Air,Air,2,2024,USA,Rare,Modern Super Saloons,110
+3819,Subaru,WRX,SUBARU WRX '22,,2,2022,Japan,Common,Modern Rally,63
+3823,Mazda,MX-5 Miata RF,Mazda MX-5 RF,Miata RF,0,2022,Japan,Epic,Modern Sports Cars,45
+3827,Hyundai,IONIQ 5 N,IONIQ 5 N '23,,0,2023,Korea,Rare,Sports Utility Heroes,80
+3829,Hyundai,N Vision 74,N Vision 74 '22,,0,2022,Korea,Rare,Track Toys,
+3840,Lamborghini,Huracán Sterrato,Huracán Sterrato,,0,2022,Italy,,Rally Monsters,80
+3846,Ford,Mustang GT,Ford Mustang '24,,1,2024,USA,Rare,Classic Muscle,61
+3847,Ford,Mustang Dark Horse,Ford Dark Horse,,1,2024,USA,Epic,Modern Muscle,61
+3848,Toyota,Camry TRD,Toyota Camry '23,Camry,0,2023,Japan,Epic,Modern Super Saloons,60
+3849,Ford,F-150 Raptor R,Ford Raptor R,F-150 Raptor,1,2023,USA,Epic,Pickups & 4x4s,136
+3850,Dodge,Durango SRT Hellcat,SRT Durango '21,Durnago,0,2021,USA,,Sports Utility Heroes,93
+3851,Toyota,Sera,Toyota Sera '91,,0,1991,Japan,Rare,Eclectic Domestics,40
+3852,Honda,Beat,Honda Beat '91,,0,1991,Japan,Rare,Eclectic Domestics,24
+3854,Autozam,AZ-1,Autozam AZ-1 '93,,2,1993,Japan,Rare,Eclectic Domestics,30
+3855,Nissan,Figaro,Figaro '91,,0,1991,Japan,Treasure Car,Eclectic Domestics,40
+3856,Nissan,Be-1,Nissan Be-1 '87,,2,1987,Japan,,Eclectic Domestics,40
+3858,Nissan,Stagea RS FOUR V,N. Stagea '97,,0,1997,Japan,Epic,Retro Super Saloons,68
+3859,Honda,City E II,City E II '84,,2,1984,Japan,Epic,Eclectic Domestics,41
+3860,Nissan,S-Cargo,S-Cargo '89,,0,1989,Japan,Rare,Eclectic Domestics,40
+3865,Honda,Acty,Honda Acty '94,,0,1994,Japan,Common,Eclectic Domestics,35
+3880,Toyota,GR Corolla,GR Corolla '23,,0,2023,Japan,,Super Hot Hatch,50
+3886,Mitsubishi,Lancer Evolution III GSR,Mit. Evo III '95,Evo III,0,1995,Japan,Treasure Car,Retro Rally,50
+3891,Lamborghini,Revuelto,Revuelto '24,,0,2024,Italy,Legendary,Hypercars,90
+3895,Mercedes-AMG,SLC 43 Final Edition,M-AMG SLC 43 '20,SLC,2,2020,Germany,Rare,Modern Sports Cars,70
+3903,Ford,Fiesta ST,Ford Fiesta '23,,0,2023,USA,Common,Hot Hatch,42
+3904,Ford,Focus ST,Ford Focus '22,,0,2022,USA,Common,Hot Hatch,52
+3908,Honda,e,Honda e '22,,2,2022,Japan,Epic,Eclectic Domestics,29
+3910,Porsche,911 Rallye,P. 911 Rallye,,0,2023,Germany,,Rally Monsters,67
+3914,Toyota,Chaser GT Twin Turbo,Chaser GT TT '91,Chaser GT,0,1991,Japan,Rare,Retro Super Saloons,65
+3917,Audi,R8 Coupé V10 GT RWD,Audi R8 GT '23,R8 GT,0,2023,Germany,,Modern Supercars,73
+3918,Nissan,Gloria Gran Turismo,Gloria GT '95,Gloria,0,1995,Japan,Rare,Retro Super Saloons,80
+3921,Nissan,Z NISMO,Z NISMO '24,,0,2024,Japan,Epic,Modern Sports Cars,62
+3928,Hyundai,i20 N,Hyundai i20 N,,0,2021,Korea,Rare,Hot Hatch,40
+3929,Nissan,PAO,Nissan PAO '89,,2,1989,Japan,Barn Find,Eclectic Domestics,40
+3933,Toyota,Chaser 2.5 Tourer V,Toyota Chaser V,Chaser,0,1997,Japan,Rare,Retro Super Saloons,70
+3953,Porsche,911 Turbo S,911 Turbo S '23,,1,2023,Germany,Rare,Modern Sports Cars,67
+3955,RAM,1500 TRX,RAM TRX '24,,2,2024,USA,Common,Pickups & 4x4s,125
+3959,Dodge,Challenger SRT Super Stock,Challenger '22,Challenger,0,2022,USA,Rare,Modern Muscle,70
+3960,Subaru,Vivio RX-R,SUBARU Vivio '94,Vivio,0,1994,Japan,Epic,Eclectic Domestics,32
+3983,BMW,X6 M Competition,BMW X6 M '24,X6 M,2,2024,Germany,Epic,Sports Utility Heroes,83
+3999,Nissan,Silvia Spec-R,Nissan Silvia 02,,0,2002,Japan,Common,Retro Sports Cars,65
+4038,Toyota,Altezza RS200 Z EDITION,Toy. Altezza '99,Altezza,0,1999,Japan,Rare,Retro Super Saloons,60
+4055,Toyota,Starlet Glanza V,Toy. Starlet '96,Starlet,0,1996,Japan,,Retro Hot Hatch,45
+4057,Nissan,Skyline GT-R V-Spec,Nis. Skyline '97,GT-R V-Spec,1,1997,Japan,Rare,Retro Sports Cars,65
+4069,BMW,M3,BMW M3 '88,,0,1988,Germany,Rare,Retro Super Saloons,55
+4081,Koenigsegg,Gemera,Gemera,,0,2024,Sweden,,Hypercars,115
+4084,Datsun,"#269 Attacking the Clock Racing 240Z ""All Carbon Hill Climb Beast""",Datsun #269 240Z,240Z,0,1972,Japan,,Extreme Track Toys,50
+4085,Mitsubishi,#269 Attacking the Clock Racing Minicab Time Attack,Mit. Minicab TA,Minicab,2,1990,Japan,Epic,Track Toys,40
+4090,Mitsubishi,Lancer Evolution VI GSR TM Edition,Mit. Evo. TME,Evo VI,0,2001,Japan,Rare,Retro Rally,50
+4094,Nissan,GT-R NISMO,NISMO GT-R '24,,0,2024,Japan,,Retro Racers,74
+4114,Nissan,Skyline GT-R,Skyline GT-R '92,,1,1992,Japan,Legendary,Retro Racers,72
+4119,Nissan,Skyline GT-R 40th Anniversary,GT-R 40AE,Skyline GT-R,1,1998,Japan,,Retro Sports Cars,65
+4124,Traffic,G 65 Traffic,G 65 Traffic,,0,,,,,
+4125,Traffic,Acty Traffic,Acty Traffic,,0,,,,,
+4126,Traffic,e Traffic,e Traffic,,0,,,,,
+4127,Traffic,Montero Traffic,Montero Traffic,,0,,,,,
+4128,Traffic,WRX Traffic,WRX Traffic,,0,,,,,
+4129,Traffic,Stagea Traffic,Stagea Traffic,,0,,,,,
+4144,Mazda,RX-7 Type R,Mazda RX-7 '92,RX-7,0,1992,Japan,Rare,Retro Sports Cars,76
+4145,Mad Mike,#123 Mad Mike 808 Wagon 'FURSTY',MM 808 Wagon,808 Wagon,2,1974,Japan,,Drift Cars,50
+4158,Lexus,LFA Forza Edition,Lexus LFA FE,LFA,0,2010,USA,,Extreme Track Toys,73
+4160,Nissan,S-Cargo Forza Edition,S-Cargo FE,S-Cargo,0,1989,Japan,,Track Toys,40
+4162,Toyota,Sprinter Trueno GT-APEX Forza Edition,Toyota AE86 FE,Sprinter Trueno,0,1985,Japan,,Track Toys,50
+4163,Wuling,Sunshine S Forza Edition,Sunshine FE,Sunshine S,2,2013,China,,Track Toys,50
+4164,Subaru,BRZ Forza Edition,SUBARU BRZ FE,BRZ,2,2022,Japan,,Unlimited Offroad,50
+4165,Mazda,RX-3 Forza Edition,Mazda RX-3 FE,RX-3,2,1973,Japan,,Classic Sports Cars,60
+4166,BMW,M2 Forza Edition,BMW M2 FE '23,M2,0,2023,Germany,,Track Toys,52
+4167,Nissan,GT-R Black Edition (R35) Forza Edition,GT-R FE '12,GT-R Black,1,2012,Japan,,Extreme Track Toys,74
+4168,Ford,Mustang GT 2+2 Fastback Forza Edition,Mustang FE '68,Mustang Fastback,1,1968,USA,,Drift Cars,90
+4169,Mercedes,190 E 2.5-16 Evolution II Forza Edition,MB 190 E FE,190 E Evo,0,1990,Germany,Forza Edition,Track Toys,70
+4171,Ford,F-150 XLT Lariat Forza Edition,Ford F-150 FE,F-150 ,0,1986,USA,,Drift Cars,723
+4175,Ford,Super Duty F-450 DRW PLATINUM Forza Edition,Ford F-450 FE,F-450,0,2020,USA,,Pickups & 4x4s,180
+4179,Nissan,#12 Skyline GT-R (BNR32 Gr.A) JTC,#12 N. Skyline,Calsonic Skyline,1,1990,Japan,Legendary,Retro Racers,120
+4197,Mazda,MX-5 Miata Forza Edition,MX-5 FE '94,Miata,0,1994,Japan,,Retro Sports Cars,48
+4198,Dodge,Viper GTS ACR Forza Edition,Viper FE '99,Viper ACR,0,1999,USA,Forza Edition,Unlimited Offroad,72
+4199,Toyota,Tacoma TRD Pro Forza Edition,Tacoma FE,Tacoma,0,2019,Japan,Forza Edition,Extreme Track Toys,80
+4200,Lotus,Evija Forza Edition,Lotus Evija FE,Evija,0,2020,UK,Forza Edition,Drift Cars,93
+4210,Lotus,Scura Motorsports Exige WTAC,Exige WTAC,Exige,0,2018,UK,,Extreme Track Toys,40
+4211,Honda,#19 101 Motorsport CRX WTAC,#19 CRX WTAC,CRX,0,1990,Japan,Rare,Extreme Track Toys,
+4212,Nissan,"#32 Skyline WTAC ""Xtreme GTR""",#32 Skyline WTAC,Skyline,0,1993,Japan,Epic,Extreme Track Toys,
+4213,Nissan,#36 Dream Project S15 Silvia WTAC,#36 Silvia WTAC,Silvia,0,2000,Japan,Epic,Extreme Track Toys,
+4214,Toyota,J&J Motorsport Supra WTAC,JJM Supra WTAC,Supra,0,1995,Japan,Epic,Extreme Track Toys,
+4216,Honda,"Acty ""RakuRaku Express""","Acty ""RakuRaku""",Acty,0,1994,Japan,Common,Eclectic Domestics,35
+4221,GR,GT Prototype,GR GT Prototype,,0,2025,Japan,Legendary,Super GT,
+4222,Nissan,Silvia K's,Nissan Silvia 89,,0,1989,Japan,Common,Retro Sports Cars,60
+4223,Nissan,Skyline GT-R V·spec II,Skyline GT-R '00,Skyline GT-R,1,2000,Japan,Rare,Retro Sports Cars,65
+4231,Honda,#52 Evasive Motorsports S2000 WTAC,#52 S2000 WTAC,S2000,0,2004,Japan,Epic,Extreme Track Toys,
+4232,Porsche,Cayman GT3 WTAC,Cayman WTAC,Cayman GT3,1,2005,Germany,Epic,Extreme Track Toys,60
+4234,Honda,Civic Type R,Honda Civic '08,,0,2008,Japan,Common,Retro Hot Hatch,50
+4250,Toyota,"Sprinter Trueno GT Apex ""Touge Edition""",Toyota AE86 TG,Sprinter Trueno,0,1985,Japan,,Track Toys,50
+4251,Honda,"S2000 ""Touge Edition""",Honda S2000 TG,S2000,0,2004,Japan,Epic,Extreme Track Toys,50
+4252,Subaru,"Impreza 22B-STi Version ""Touge Edition""",SUBARU 22B TG,Impreza 22B,0,1998,Japan,Legendary,Retro Rally,60
+4254,Honda,#33 Integra WTAC,#33 H. Integra,Integra,0,2001,Japan,Epic,Extreme Track Toys,
+4255,Toyota,Crown Super Deluxe Taxi,T. Crown Taxi,Crown,2,2005,Japan,Common,Retro Super Saloons,65
+4257,Toyota,JPN Taxi,Toyota JPN Taxi,Taxi,2,2017,Japan,Common,Eclectic Domestics,52
+4259,Toyota,86 'Stories',86 Stories,,2,2013,Japan,,Track Toys,50
+4260,Nissan,"GT-R NISMO ""Initial Drive""",GT-R ID,,0,2020,Japan,,Retro Racers,74
+4261,Porsche,"911 GT2 ""Initial Drive""",P. 911 GT2 ID,,0,1995,Germany,,Retro Supercars,92
+4263,GR,GT Prototype,GR GT Prototype,,0,2025,Japan,Legendary,Super GT,
+4264,Ferrari,"FXX-K Evo ""Welcome Pack""",Ferrari FXX-K WP,FXX-K Evo,0,2018,Italy,Legendary,Extreme Track Toys,86
+4265,Mercedes,"GT Black Series ""Welcome Pack""",M-AMG GT WP,GT Black,0,2020,Germany,Legendary,Track Toys,75
+4266,BMW,"M4 Competition Coupé ""Welcome Pack""",BMW M4 '21 WP,M4 Competition,0,2021,Germany,Legendary,Modern Super Saloons,59
+4267,Mitsubishi,Lancer Evolution VIII MR 'Welcome Pack',Mit. Evo VIII WP,Evo VIII,0,2004,Japan,Legendary,Modern Rally,55
+4268,Ford,"F-150 Raptor R ""Welcome Pack""",Ford Raptor R WP,F-150 Raptor,0,2023,USA,Legendary,Pickups & 4x4s,136
+4277,Honda,#21 Hardrace/JDMYard Civic WTAC,#21 Civic WTAC,Civic,0,1992,Japan,Epic,Extreme Track Toys,
+4278,Toyota,Land Cruiser,Toyota LC '25,,0,2025,Japan,Rare,Sports Utility Heroes,68
+4287,Subaru,Vivio RX-R Forza Edition,SUBARU Vivio FE,Vivio,0,1994,Japan,,Extreme Track Toys,32
+4303,Nissan,"GT-R Black Edition (R35) ""Touge Edition""",Nissan GT-R TG,GT-R Black,0,2020,Japan,Rare,Modern Supercars,74
+4313,Porsche,#3 917 LH Forza Edition,Porsche 917 FE,917 LH,2,1970,Germany,,Extreme Track Toys,120
+4315,Peel,P50 Trolli Edition,Peel P50 Trolli,P50,2,1962,UK,,Cult Cars,7
+4332,Traffic,Crown Super Deluxe Taxi Traffic,T. Crown Traffic,,0,,,,,
+4333,Traffic,JPN Taxi Traffic,T. Taxi Traffic,,0,,,,,
+4341,Ferrari,J50 Pre-Order Car,Ferrari J50 PO,J50,2,2017,Italy,Legendary,Modern Supercars,78
+4342,Toyota,Sports 800 Fanta Edition,Sports 800 FE,Sports 800,2,1965,Japan,Rare,Classic Sports Cars,30
