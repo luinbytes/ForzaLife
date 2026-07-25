@@ -5,7 +5,7 @@ Safe add-on for Forza Horizon 6 adding fuel usage, periodic oil maintenance, boo
 
 ## Linux companion
 
-This fork adds an independently authored Rust companion under [`linux/`](linux/). It listens only to the official FH6 Data Out UDP feed and renders a transparent, click-through HUD inside gamescope. The proprietary Windows release and its instructions below remain unchanged and are not bundled with or relicensed by the Linux code.
+This fork adds a native Rust Linux port under [`linux/`](linux/). It listens to the FH6 Data Out UDP feed and renders a transparent, click-through HUD inside gamescope, matching the Windows application's behavior and presentation.
 
 Build and install:
 
@@ -23,7 +23,7 @@ gamescope -f -r 144 -w 1920 -h 1080 -- ~/.local/bin/forzalife session %command%
 
 Then enable Data Out in FH6 with IP `127.0.0.1` and port `8080`. Set another port by placing `FORZALIFE_PORT=9000` before `gamescope`.
 
-The current Linux HUD shows live speed, RPM, boost, gear, persistent per-car fuel, odometer and oil state, a service map, packet count, and connection state. Press `L` to register gas stations and workshops at the current telemetry position; stopping within 25 m refuels or services the current car. It does not inject into, read memory from, or modify FH6. See [`linux/CLEAN_ROOM.md`](linux/CLEAN_ROOM.md) for the source boundary and [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for the implementation evidence.
+The Linux HUD shows live speed and boost, persistent per-car fuel, odometer and oil state, plus service navigation. Press `L` to open the service-location menu; stopping within 25 m of a saved location refuels or services the current car. It does not read memory from or modify FH6. See [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for Linux overlay setup notes.
 
 ## Hello
 

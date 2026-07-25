@@ -2,7 +2,7 @@
 
 ## Purpose
 
-ForzaLife adds persistent vehicle-life simulation around Forza telemetry. The upstream Windows application remains an external proprietary distribution. This fork adds an independently authored Linux companion.
+ForzaLife adds persistent vehicle-life simulation around Forza telemetry. This fork ports the Windows application to a native Linux companion.
 
 ## Vocabulary
 
@@ -13,7 +13,7 @@ ForzaLife adds persistent vehicle-life simulation around Forza telemetry. The up
 
 ## Boundaries
 
-- Linux code consumes only documented Data Out UDP telemetry.
+- Linux code consumes FH6 Data Out UDP telemetry.
 - Linux code does not inspect or modify the game process.
-- Proprietary Windows binaries and assets are never read, copied, or bundled.
+- The authorized Windows implementation is the reference for Linux behavior, presentation, and assets.
 - The upstream Windows usage and download documentation remains available.

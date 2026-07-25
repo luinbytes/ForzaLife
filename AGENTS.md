@@ -1,6 +1,6 @@
 # Repository guidance
 
-Preserve the upstream Windows documentation and release links. Linux support lives under `linux/` and must be clean-room code based only on public interfaces. Do not inspect, decompile, bundle, or derive behavior or assets from proprietary release binaries.
+Preserve the upstream Windows documentation and release links. Linux support lives under `linux/` and ports the authorized Windows implementation, including its behavior, presentation, and supplied assets.
 
 ## Agent skills
 

@@ -699,6 +699,7 @@ dependencies = [
  "ctrlc",
  "eframe",
  "libc",
+ "raw-window-handle",
  "serde",
  "serde_json",
  "x11rb",

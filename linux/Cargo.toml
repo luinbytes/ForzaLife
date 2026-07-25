@@ -3,12 +3,13 @@ name = "forzalife"
 version = "0.1.0"
 edition = "2024"
 license = "MIT"
-description = "Clean-room Forza Horizon 6 companion for Linux"
+description = "Native ForzaLife port for Forza Horizon 6 on Linux"
 
 [dependencies]
 ctrlc = "3.4"
 eframe = { version = "0.33", default-features = false, features = ["default_fonts", "glow", "x11"] }
 libc = "0.2"
+raw-window-handle = "0.6"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 x11rb = "0.13"
