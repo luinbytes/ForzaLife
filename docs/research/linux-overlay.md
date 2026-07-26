@@ -16,6 +16,8 @@ Validation uses the Rust test suite plus a live FH6 run: confirm the process is 
 
 The Linux build embeds the Windows release's `cardata.csv` metadata and the 118 points of interest decoded from `WorldData/world_map.dat`. Its main menu, navigation submenu, vehicle card fields, selection behavior, four-second timeout, and default `L`, `;`, and `'` controls follow the decompiled v0.4.2-beta implementation.
 
+The visual reference is the release's recovered `MainWindow`, `BoostGauge`, and `VehicleInfoCard` XAML. The Linux renderer uses their original 1920×1080 anchors, 290×220 menu frame, 750×480 centered vehicle card, 400×291 bottom-right HUD, colors, bundled Roboto Condensed faces, and boost background asset.
+
 ## Implementation references
 
 - [Upstream ForzaLife](https://github.com/puffinflight/ForzaLife) and its [v0.4.2-beta release](https://github.com/puffinflight/ForzaLife/releases/tag/v.0.4.2-beta) remain the authoritative Windows implementation and release reference.

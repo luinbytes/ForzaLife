@@ -46,7 +46,6 @@ impl Default for VehicleLife {
 struct LastSample {
     car_ordinal: i32,
     timestamp_ms: u32,
-    distance_m: f32,
 }
 
 #[derive(Default, Serialize, Deserialize)]
@@ -75,15 +74,14 @@ impl Simulation {
             if !(0.0..=1.0).contains(&elapsed_s) {
                 elapsed_s = 0.0;
             }
-            let candidate = telemetry.distance_m - last.distance_m;
-            if (0.0..=200.0).contains(&candidate) {
-                distance_delta = candidate;
+            let speed_mps = telemetry.speed_mps.abs();
+            if speed_mps >= 0.1 {
+                distance_delta = speed_mps * elapsed_s;
             }
         }
         self.last = Some(LastSample {
             car_ordinal: telemetry.car_ordinal,
             timestamp_ms: telemetry.timestamp_ms,
-            distance_m: telemetry.distance_m,
         });
 
         let vehicle = self.vehicles.entry(telemetry.car_ordinal).or_default();
@@ -110,9 +108,9 @@ impl Simulation {
         snapshot(telemetry.car_ordinal, vehicle)
     }
 
-    pub fn refuel(&mut self, car_ordinal: i32) {
+    pub fn refuel(&mut self, car_ordinal: i32, liters: f32) {
         let vehicle = self.vehicles.entry(car_ordinal).or_default();
-        vehicle.fuel_liters = vehicle.tank_liters;
+        vehicle.fuel_liters = (vehicle.fuel_liters + liters.max(0.0)).min(vehicle.tank_liters);
     }
 
     pub fn service_oil(&mut self, car_ordinal: i32) {

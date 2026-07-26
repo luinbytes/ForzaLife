@@ -36,12 +36,13 @@ fn driving_consumes_fuel_and_advances_per_car_maintenance() {
 }
 
 #[test]
-fn implausible_distance_resets_do_not_inflate_the_odometer() {
+fn odometer_uses_speed_when_forza_distance_is_stuck() {
     let mut simulation = Simulation::default();
-    simulation.update(&telemetry(1_000, 10_000.0, 0.0));
-    let life = simulation.update(&telemetry(2_000, 5.0, 0.0));
+    simulation.update(&telemetry(1_000, 0.0, 0.0));
+    let life = simulation.update(&telemetry(2_000, 0.0, 0.0));
 
-    assert_eq!(life.odometer_m, 0.0);
+    assert_eq!(life.odometer_m, 30.0);
+    assert_eq!(life.trip_m, 30.0);
 }
 
 #[test]
@@ -66,7 +67,7 @@ fn paused_usage_stops_fuel_consumption_but_keeps_distance() {
     let life = simulation.update(&telemetry(2_000, 100.0, 100_000.0));
 
     assert_eq!(life.fuel_liters, DEFAULT_TANK_LITERS);
-    assert_eq!(life.trip_m, 100.0);
+    assert_eq!(life.trip_m, 30.0);
     assert!(life.is_usage_paused);
 }
 
@@ -77,11 +78,29 @@ fn vehicle_capacity_controls_fuel_percentage_and_refill() {
     assert_eq!(life.fuel_liters, 130.0);
     assert_eq!(life.fuel_percent, 1.0);
 
-    simulation.refuel(42);
+    simulation.refuel(42, 20.0);
     let mut stopped = telemetry(2_000, 0.0, 0.0);
     stopped.current_engine_rpm = 0.0;
     let life = simulation.update_with_capacity(&stopped, 130.0);
     assert_eq!(life.fuel_liters, 130.0);
+}
+
+#[test]
+fn refuelling_adds_fuel_in_steps_and_stops_at_capacity() {
+    let mut simulation = Simulation::default();
+    simulation.update_with_capacity(&telemetry(1_000, 0.0, 0.0), 60.0);
+    simulation.refuel(42, 0.75);
+    assert_eq!(simulation.current(42).expect("car state").fuel_liters, 60.0);
+
+    let consuming = telemetry(2_000, 0.0, 100_000_000.0);
+    simulation.update_with_capacity(&consuming, 60.0);
+    let before = simulation.current(42).expect("car state").fuel_liters;
+    simulation.refuel(42, 0.75);
+    let after = simulation.current(42).expect("car state").fuel_liters;
+    assert_eq!(after - before, 0.75);
+
+    simulation.refuel(42, 1_000.0);
+    assert_eq!(simulation.current(42).expect("car state").fuel_liters, 60.0);
 }
 
 #[test]
@@ -95,5 +114,5 @@ fn trip_odometer_survives_a_save_and_load() {
     let loaded = Simulation::load(&path);
     std::fs::remove_file(path).expect("remove test state");
 
-    assert_eq!(loaded.current(42).expect("car state").trip_m, 100.0);
+    assert_eq!(loaded.current(42).expect("car state").trip_m, 30.0);
 }

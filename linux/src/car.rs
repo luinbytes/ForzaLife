@@ -16,7 +16,9 @@ impl CarInfo {
     }
 
     pub fn tank_capacity_liters(&self, cylinders: i32) -> f32 {
-        if self.fuel_capacity_liters >= 10.0 {
+        if self.fuel_capacity_liters >= 10.0
+            && (cylinders == 0 || self.fuel_capacity_liters < 100.0)
+        {
             self.fuel_capacity_liters
         } else {
             Self::fallback_tank_capacity_liters(cylinders)

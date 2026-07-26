@@ -31,6 +31,12 @@ use x11rb::{
 
 const WINDOW_TITLE: &str = "ForzaLife Linux Overlay";
 const MENU_TIMEOUT: Duration = Duration::from_secs(4);
+const REFUEL_LITERS_PER_SECOND: f32 = 0.75;
+const MENU_SIZE: [f32; 2] = [290.0, 220.0];
+const VEHICLE_CARD_SIZE: [f32; 2] = [750.0, 480.0];
+const HUD_SIZE: [f32; 2] = [400.0, 291.0];
+const ROBOTO_MEDIUM: &str = "Roboto Condensed Medium";
+const ROBOTO_SEMIBOLD: &str = "Roboto Condensed Semibold";
 
 #[derive(Clone, Copy)]
 enum InputEvent {
@@ -127,11 +133,13 @@ pub fn run(port: u16) -> eframe::Result {
             ..Default::default()
         },
         Box::new(|context| {
+            install_forza_fonts(&context.egui_ctx);
             context.egui_ctx.set_visuals(egui::Visuals {
                 panel_fill: egui::Color32::TRANSPARENT,
                 window_fill: egui::Color32::TRANSPARENT,
                 ..egui::Visuals::dark()
             });
+            let boost_background = load_boost_background(&context.egui_ctx);
             Ok(Box::new(OverlayApp {
                 latest,
                 locations,
@@ -139,11 +147,13 @@ pub fn run(port: u16) -> eframe::Result {
                 simulation,
                 input,
                 menu: MenuState::default(),
+                last_menu_page: MenuPage::Main,
                 last_menu_activity: Instant::now(),
                 navigation_target: None,
                 classified: false,
                 classification_error_reported: false,
                 boost: BoostGaugeState::default(),
+                boost_background,
                 screen_size: [width, height],
                 port,
             }))
@@ -158,11 +168,13 @@ struct OverlayApp {
     simulation: Arc<RwLock<Simulation>>,
     input: Receiver<InputEvent>,
     menu: MenuState,
+    last_menu_page: MenuPage,
     last_menu_activity: Instant,
     navigation_target: Option<LocationKind>,
     classified: bool,
     classification_error_reported: bool,
     boost: BoostGaugeState,
+    boost_background: egui::TextureHandle,
     screen_size: [f32; 2],
     port: u16,
 }
@@ -184,7 +196,7 @@ impl eframe::App for OverlayApp {
                 Err(_) => {}
             }
         }
-        let (telemetry, mut life, fresh, packets, rejected) = {
+        let (telemetry, mut life, fresh, packets) = {
             let latest = self.latest.read().unwrap();
             (
                 latest.telemetry.clone(),
@@ -193,11 +205,12 @@ impl eframe::App for OverlayApp {
                     .received_at
                     .is_some_and(|at| at.elapsed() < Duration::from_secs(2)),
                 latest.packets,
-                latest.rejected,
             )
         };
 
-        let active_telemetry = telemetry.as_ref().filter(|_| fresh);
+        let active_telemetry = telemetry
+            .as_ref()
+            .filter(|telemetry| fresh && telemetry.car_ordinal > 0);
         if let Some(updated) =
             self.handle_input(active_telemetry.map(|telemetry| telemetry.car_ordinal))
         {
@@ -211,7 +224,14 @@ impl eframe::App for OverlayApp {
 
         if let Some(data) = active_telemetry {
             self.boost.update(data);
-            render_race_hud(context, data, life.as_ref(), &self.boost, self.screen_size);
+            render_race_hud(
+                context,
+                data,
+                life.as_ref(),
+                &self.boost,
+                &self.boost_background,
+                self.screen_size,
+            );
             let locations = self.locations.read().unwrap();
             if let Some(target) = self.navigation_target {
                 if locations
@@ -224,14 +244,7 @@ impl eframe::App for OverlayApp {
                 }
             }
         } else {
-            render_intro(
-                context,
-                fresh,
-                packets,
-                rejected,
-                self.port,
-                self.screen_size,
-            );
+            render_intro(context, packets, self.port);
         }
 
         let menu_opacity = context.animate_bool_with_time(
@@ -244,33 +257,35 @@ impl eframe::App for OverlayApp {
             self.menu.page() == MenuPage::VehicleCard,
             0.25,
         );
-        match self.menu.page() {
-            MenuPage::Main => render_menu(
+        if matches!(self.menu.page(), MenuPage::Main | MenuPage::Navigation) {
+            self.last_menu_page = self.menu.page();
+        }
+        if menu_opacity > 0.0 {
+            let rows = match self.last_menu_page {
+                MenuPage::Navigation => navigation_menu_rows(),
+                _ => main_menu_rows(life.as_ref().is_some_and(|life| life.is_usage_paused)),
+            };
+            render_menu(
                 context,
-                &main_menu_rows(life.as_ref().is_some_and(|life| life.is_usage_paused)),
+                &rows,
                 self.menu.selected(),
                 menu_opacity,
-            ),
-            MenuPage::Navigation => render_menu(
-                context,
-                &navigation_menu_rows(),
-                self.menu.selected(),
-                menu_opacity,
-            ),
-            MenuPage::VehicleCard => {
-                if let (Some(data), Some(life)) = (active_telemetry, life.as_ref()) {
-                    render_vehicle_card(
-                        context,
-                        self.cars.get(data.car_ordinal),
-                        life,
-                        data.num_cylinders,
-                        card_opacity,
-                    );
-                } else {
-                    self.menu.close();
-                }
+                self.screen_size,
+            );
+        }
+        if card_opacity > 0.0 {
+            if let (Some(data), Some(life)) = (active_telemetry, life.as_ref()) {
+                render_vehicle_card(
+                    context,
+                    self.cars.get(data.car_ordinal),
+                    life,
+                    data.num_cylinders,
+                    card_opacity,
+                    self.screen_size,
+                );
+            } else {
+                self.menu.close();
             }
-            MenuPage::Closed => {}
         }
     }
 }
@@ -312,6 +327,45 @@ fn forza_green() -> egui::Color32 {
 
 fn warning_color() -> egui::Color32 {
     egui::Color32::from_rgba_unmultiplied(255, 153, 0, 128)
+}
+
+fn install_forza_fonts(context: &egui::Context) {
+    let mut fonts = egui::FontDefinitions::default();
+    fonts.font_data.insert(
+        "forza-medium".to_owned(),
+        Arc::new(egui::FontData::from_static(include_bytes!(
+            "../assets/robotocondensed-mediumitalic.ttf"
+        ))),
+    );
+    fonts.font_data.insert(
+        "forza-semibold".to_owned(),
+        Arc::new(egui::FontData::from_static(include_bytes!(
+            "../assets/robotocondensed-semibolditalic.ttf"
+        ))),
+    );
+    let mut medium = vec!["forza-medium".to_owned()];
+    medium.extend(fonts.families[&egui::FontFamily::Proportional].clone());
+    fonts
+        .families
+        .insert(egui::FontFamily::Name(ROBOTO_MEDIUM.into()), medium);
+    let mut semibold = vec!["forza-semibold".to_owned()];
+    semibold.extend(fonts.families[&egui::FontFamily::Proportional].clone());
+    fonts
+        .families
+        .insert(egui::FontFamily::Name(ROBOTO_SEMIBOLD.into()), semibold);
+    context.set_fonts(fonts);
+}
+
+fn load_boost_background(context: &egui::Context) -> egui::TextureHandle {
+    let image = image::load_from_memory(include_bytes!("../assets/boost_bg.png"))
+        .expect("bundled boost gauge background")
+        .to_rgba8();
+    let size = [image.width() as usize, image.height() as usize];
+    context.load_texture(
+        "forzalife-boost-background",
+        egui::ColorImage::from_rgba_unmultiplied(size, image.as_raw()),
+        egui::TextureOptions::LINEAR,
+    )
 }
 
 struct MenuRow {
@@ -380,51 +434,82 @@ fn navigation_menu_rows() -> Vec<MenuRow> {
     ]
 }
 
-fn render_menu(context: &egui::Context, rows: &[MenuRow], selected: usize, opacity: f32) {
+fn menu_rect(screen_size: [f32; 2]) -> egui::Rect {
+    egui::Rect::from_min_size(
+        egui::pos2(20.0, screen_size[1] - 430.0 - MENU_SIZE[1]),
+        egui::vec2(MENU_SIZE[0], MENU_SIZE[1]),
+    )
+}
+
+fn render_menu(
+    context: &egui::Context,
+    rows: &[MenuRow],
+    selected: usize,
+    opacity: f32,
+    screen_size: [f32; 2],
+) {
+    let target = menu_rect(screen_size);
     egui::Area::new(egui::Id::new("forzalife-menu"))
-        .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+        .fixed_pos(target.min)
         .show(context, |ui| {
             ui.set_opacity(opacity);
-            ui.set_width(430.0);
-            ui.vertical_centered(|ui| {
-                for (index, row) in rows.iter().enumerate() {
-                    let (rect, _) =
-                        ui.allocate_exact_size(egui::vec2(280.0, 46.0), egui::Sense::hover());
-                    let selected = selected == index;
-                    let painter = ui.painter_at(rect);
-                    painter.rect_filled(
-                        rect,
-                        0.0,
-                        if selected {
-                            egui::Color32::WHITE
-                        } else {
-                            egui::Color32::from_black_alpha(221)
-                        },
-                    );
-                    let color = if selected {
-                        egui::Color32::BLACK
-                    } else if row.enabled {
+            let (base, _) = ui.allocate_exact_size(target.size(), egui::Sense::hover());
+            let scale = 0.9 + opacity * 0.1;
+            let scaled = egui::Rect::from_center_size(base.center(), base.size() * scale);
+            let painter = ui.painter();
+            painter.rect_filled(
+                scaled,
+                4.0 * scale,
+                egui::Color32::from_rgba_unmultiplied(255, 255, 255, 17),
+            );
+            painter.rect_stroke(
+                scaled,
+                4.0 * scale,
+                egui::Stroke::new(2.0 * scale, forza_pink()),
+                egui::StrokeKind::Inside,
+            );
+
+            for (index, row) in rows.iter().take(5).enumerate() {
+                let row_rect = egui::Rect::from_min_size(
+                    base.min + egui::vec2(5.0, 6.0 + index as f32 * 42.0),
+                    egui::vec2(280.0, 40.0),
+                );
+                let row_rect = egui::Rect::from_center_size(
+                    scaled.center() + (row_rect.center() - base.center()) * scale,
+                    row_rect.size() * scale,
+                );
+                let is_selected = selected == index;
+                painter.rect_filled(
+                    row_rect,
+                    3.0 * scale,
+                    if is_selected {
                         egui::Color32::WHITE
                     } else {
-                        egui::Color32::from_white_alpha(102)
-                    };
-                    painter.text(
-                        rect.left_center() + egui::vec2(18.0, 0.0),
-                        egui::Align2::LEFT_CENTER,
-                        row.icon,
-                        egui::FontId::proportional(20.0),
-                        color,
-                    );
-                    painter.text(
-                        rect.left_center() + egui::vec2(58.0, 0.0),
-                        egui::Align2::LEFT_CENTER,
-                        &row.text,
-                        egui::FontId::proportional(16.0),
-                        color,
-                    );
-                    ui.add_space(3.0);
-                }
-            });
+                        egui::Color32::from_black_alpha(221)
+                    },
+                );
+                let color = if is_selected {
+                    egui::Color32::BLACK
+                } else if row.enabled {
+                    egui::Color32::WHITE
+                } else {
+                    egui::Color32::from_white_alpha(102)
+                };
+                painter.text(
+                    row_rect.left_center() + egui::vec2(22.5 * scale, 0.0),
+                    egui::Align2::CENTER_CENTER,
+                    row.icon,
+                    egui::FontId::proportional(18.0 * scale),
+                    color,
+                );
+                painter.text(
+                    row_rect.left_center() + egui::vec2(50.0 * scale, 0.0),
+                    egui::Align2::LEFT_CENTER,
+                    &row.text,
+                    egui::FontId::proportional(14.0 * scale),
+                    color,
+                );
+            }
         });
 }
 
@@ -434,6 +519,7 @@ fn render_vehicle_card(
     life: &LifeSnapshot,
     num_cylinders: i32,
     opacity: f32,
+    screen_size: [f32; 2],
 ) {
     let title = car
         .map(CarInfo::display_name)
@@ -498,96 +584,134 @@ fn render_vehicle_card(
         ));
     }
 
+    let target = vehicle_card_rect(screen_size);
     egui::Area::new(egui::Id::new("forzalife-vehicle-card"))
-        .anchor(egui::Align2::CENTER_CENTER, egui::Vec2::ZERO)
+        .fixed_pos(target.min)
         .show(context, |ui| {
             ui.set_opacity(opacity);
-            egui::Frame::new()
-                .fill(egui::Color32::from_black_alpha(221))
-                .inner_margin(egui::Margin::symmetric(30, 24))
-                .show(ui, |ui| {
-                    ui.set_width(720.0);
-                    ui.label(
-                        egui::RichText::new(title)
-                            .size(28.0)
-                            .strong()
-                            .italics()
-                            .color(egui::Color32::WHITE),
-                    );
-                    ui.label(
-                        egui::RichText::new("Vehicle Info Card")
-                            .size(15.0)
-                            .color(forza_pink()),
-                    );
-                    ui.add_space(22.0);
-                    for row in items.chunks(3) {
-                        ui.columns(3, |columns| {
-                            for (column, (label, value, color)) in
-                                columns.iter_mut().zip(row.iter())
-                            {
-                                column.label(
-                                    egui::RichText::new(*label)
-                                        .size(12.0)
-                                        .color(egui::Color32::from_white_alpha(140)),
-                                );
-                                column.label(
-                                    egui::RichText::new(value).size(19.0).strong().color(*color),
-                                );
-                            }
-                        });
-                        ui.add_space(18.0);
-                    }
-                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                        ui.label(
-                            egui::RichText::new("Press [L] to close")
-                                .size(12.0)
-                                .color(egui::Color32::from_white_alpha(150)),
-                        );
-                    });
-                });
+            let (outer, _) = ui.allocate_exact_size(target.size(), egui::Sense::hover());
+            let painter = ui.painter();
+            painter.add(
+                egui::epaint::Shadow {
+                    offset: [0, 0],
+                    blur: 15,
+                    spread: 0,
+                    color: egui::Color32::from_black_alpha(179),
+                }
+                .as_shape(outer, 16),
+            );
+            painter.rect_filled(
+                outer,
+                16.0,
+                egui::Color32::from_rgba_unmultiplied(17, 17, 17, 153),
+            );
+            let border = outer.shrink(5.0);
+            painter.rect_stroke(
+                border,
+                10.0,
+                egui::Stroke::new(2.5_f32, forza_pink()),
+                egui::StrokeKind::Inside,
+            );
+            let content = border.shrink2(egui::vec2(22.5, 24.5));
+            let header_left = content.left() + 10.0;
+            painter.text(
+                egui::pos2(header_left, content.top()),
+                egui::Align2::LEFT_TOP,
+                title,
+                egui::FontId::proportional(28.0),
+                egui::Color32::WHITE,
+            );
+            painter.text(
+                egui::pos2(header_left, content.top() + 36.0),
+                egui::Align2::LEFT_TOP,
+                "Vehicle Info Card",
+                egui::FontId::proportional(14.0),
+                forza_pink(),
+            );
+            let separator_y = content.top() + 67.0;
+            painter.line_segment(
+                [
+                    egui::pos2(header_left, separator_y),
+                    egui::pos2(content.right() - 10.0, separator_y),
+                ],
+                egui::Stroke::new(1.0_f32, egui::Color32::from_white_alpha(51)),
+            );
+
+            let grid = egui::Rect::from_min_max(
+                egui::pos2(content.left(), separator_y + 13.0),
+                egui::pos2(content.right(), content.bottom() - 36.0),
+            );
+            let cell_size = egui::vec2(grid.width() / 3.0, grid.height() / 2.0);
+            for (index, (label, value, color)) in items.iter().enumerate() {
+                let column = index % 3;
+                let row = index / 3;
+                let cell = egui::Rect::from_min_size(
+                    grid.min + egui::vec2(column as f32 * cell_size.x, row as f32 * cell_size.y),
+                    cell_size,
+                );
+                let card = cell.shrink2(egui::vec2(10.0, 5.0));
+                painter.rect_filled(
+                    card,
+                    6.0,
+                    egui::Color32::from_rgba_unmultiplied(17, 17, 17, 221),
+                );
+                painter.text(
+                    card.min + egui::vec2(20.0, 14.0),
+                    egui::Align2::LEFT_TOP,
+                    *label,
+                    egui::FontId::proportional(16.0),
+                    egui::Color32::from_white_alpha(119),
+                );
+                painter.text(
+                    card.min + egui::vec2(20.0, 40.0),
+                    egui::Align2::LEFT_TOP,
+                    value,
+                    egui::FontId::proportional(28.0),
+                    *color,
+                );
+            }
+            painter.text(
+                egui::pos2(content.center().x, content.bottom()),
+                egui::Align2::CENTER_BOTTOM,
+                "Press [L] to close",
+                egui::FontId::proportional(18.0),
+                egui::Color32::from_white_alpha(153),
+            );
         });
 }
 
-fn render_intro(
-    context: &egui::Context,
-    fresh: bool,
-    packets: u64,
-    rejected: u64,
-    port: u16,
-    screen_size: [f32; 2],
-) {
+fn vehicle_card_rect(screen_size: [f32; 2]) -> egui::Rect {
+    egui::Rect::from_center_size(
+        egui::pos2(screen_size[0] / 2.0, screen_size[1] / 2.0),
+        egui::vec2(VEHICLE_CARD_SIZE[0], VEHICLE_CARD_SIZE[1]),
+    )
+}
+
+fn render_intro(context: &egui::Context, packets: u64, port: u16) {
     egui::Area::new(egui::Id::new("forzalife-intro"))
-        .fixed_pos([screen_size[0] - 410.0, screen_size[1] - 95.0])
+        .anchor(egui::Align2::RIGHT_BOTTOM, egui::vec2(-30.0, -60.0))
         .show(context, |ui| {
             egui::Frame::new()
                 .fill(egui::Color32::from_black_alpha(204))
-                .corner_radius(15)
+                .corner_radius(6)
                 .inner_margin(egui::Margin::symmetric(18, 14))
                 .show(ui, |ui| {
-                    ui.set_width(350.0);
                     ui.horizontal(|ui| {
+                        ui.label(egui::RichText::new("⌛").size(15.0).color(if packets == 0 {
+                            forza_green()
+                        } else {
+                            forza_pink()
+                        }));
                         ui.label(
-                            egui::RichText::new(if fresh { "⌛" } else { "●" })
-                                .size(20.0)
-                                .color(if fresh { forza_green() } else { forza_pink() }),
+                            egui::RichText::new(if packets == 0 {
+                                format!("Waiting for first telemetry on port {port}")
+                            } else {
+                                "ForzaLife is waiting for Horizon 6".to_owned()
+                            })
+                            .font(forza_font(15.0, false))
+                            .color(egui::Color32::WHITE),
                         );
-                        ui.vertical(|ui| {
-                            ui.label(
-                                egui::RichText::new("FORZALIFE")
-                                    .size(15.0)
-                                    .strong()
-                                    .color(egui::Color32::WHITE),
-                            );
-                            ui.label(
-                                egui::RichText::new(format!(
-                                    "Waiting for FH6 Data Out on 127.0.0.1:{port}"
-                                ))
-                                .size(13.0)
-                                .color(egui::Color32::from_white_alpha(180)),
-                            );
-                        });
                     });
-                    ui.small(format!("{packets} packets · {rejected} rejected"));
                 });
         });
 }
@@ -597,105 +721,158 @@ fn render_race_hud(
     telemetry: &Telemetry,
     life: Option<&LifeSnapshot>,
     boost: &BoostGaugeState,
+    boost_background: &egui::TextureHandle,
     screen_size: [f32; 2],
 ) {
+    let target = hud_rect(screen_size);
     egui::Area::new(egui::Id::new("forzalife-race-hud"))
-        .fixed_pos([
-            (screen_size[0] - 400.0).max(0.0),
-            (screen_size[1] - 291.0).max(0.0),
-        ])
+        .fixed_pos(target.min)
         .show(context, |ui| {
-            ui.set_width(360.0);
-            ui.horizontal(|ui| {
-                if boost.visible {
-                    boost_gauge(ui, boost);
-                    ui.add_space(16.0);
+            let (hud, _) = ui.allocate_exact_size(target.size(), egui::Sense::hover());
+            let painter = ui.painter();
+            if boost.visible {
+                boost_gauge(
+                    painter,
+                    egui::Rect::from_min_size(
+                        hud.min + egui::vec2(20.0, -70.0),
+                        egui::vec2(104.0, 104.0),
+                    ),
+                    boost,
+                    boost_background,
+                );
+            }
+            if let Some(life) = life {
+                let odometer_right = hud.left() + 165.0;
+                let odometer_bottom = hud.bottom() - 1.0;
+                painter.text(
+                    egui::pos2(odometer_right - 28.0, odometer_bottom),
+                    egui::Align2::RIGHT_BOTTOM,
+                    format!("{:.0}", life.odometer_m / 1_000.0),
+                    forza_font(23.0, true),
+                    egui::Color32::from_white_alpha(128),
+                );
+                painter.text(
+                    egui::pos2(odometer_right, odometer_bottom - 1.0),
+                    egui::Align2::RIGHT_BOTTOM,
+                    "KM",
+                    forza_font(14.0, true),
+                    egui::Color32::from_white_alpha(128),
+                );
+                if !life.is_usage_paused {
+                    fuel_and_oil(painter, hud, life, telemetry.num_cylinders == 0);
                 }
-                ui.vertical(|ui| {
-                    ui.add_space(8.0);
-                    ui.label(
-                        egui::RichText::new(format!("{:.0}", telemetry.speed_mps * 3.6))
-                            .size(28.0)
-                            .strong()
-                            .italics()
-                            .color(egui::Color32::WHITE),
-                    );
-                    ui.label(
-                        egui::RichText::new("KM/H")
-                            .size(12.0)
-                            .strong()
-                            .color(egui::Color32::from_white_alpha(128)),
-                    );
-                    ui.add_space(8.0);
-                    if let Some(life) = life {
-                        ui.horizontal(|ui| {
-                            ui.label(
-                                egui::RichText::new(format!("{:.0}", life.odometer_m / 1_000.0))
-                                    .size(23.0)
-                                    .strong()
-                                    .italics()
-                                    .color(egui::Color32::from_white_alpha(128)),
-                            );
-                            ui.label(
-                                egui::RichText::new("KM")
-                                    .size(14.0)
-                                    .strong()
-                                    .color(egui::Color32::from_white_alpha(128)),
-                            );
-                        });
-                        ui.add_space(7.0);
-                        if !life.is_usage_paused {
-                            fuel_and_oil(ui, life);
-                        }
-                    }
-                });
-            });
+            }
         });
 }
 
-fn boost_gauge(ui: &mut egui::Ui, boost: &BoostGaugeState) {
+fn hud_rect(screen_size: [f32; 2]) -> egui::Rect {
+    egui::Rect::from_min_size(
+        egui::pos2(
+            (screen_size[0] - HUD_SIZE[0] - 2.0).max(0.0),
+            (screen_size[1] - HUD_SIZE[1] - 2.0).max(0.0),
+        ),
+        egui::vec2(HUD_SIZE[0], HUD_SIZE[1]),
+    )
+}
+
+fn forza_font(size: f32, semibold: bool) -> egui::FontId {
+    egui::FontId::new(
+        size,
+        egui::FontFamily::Name(
+            if semibold {
+                ROBOTO_SEMIBOLD
+            } else {
+                ROBOTO_MEDIUM
+            }
+            .into(),
+        ),
+    )
+}
+
+fn boost_gauge(
+    painter: &egui::Painter,
+    rect: egui::Rect,
+    boost: &BoostGaugeState,
+    background: &egui::TextureHandle,
+) {
     let min_display = boost.min_display as f32;
     let max_display = boost.max_display as f32;
     let angle = boost_needle_angle(boost.current_boost, min_display, max_display);
-    let (rect, _) = ui.allocate_exact_size(egui::vec2(104.0, 104.0), egui::Sense::hover());
-    let painter = ui.painter_at(rect);
     let center = rect.center();
-
-    let mut previous = None;
-    for step in 0..=40 {
-        let degrees = -135.0 + step as f32 / 40.0 * 170.0;
-        let radians = degrees.to_radians();
-        let point = center + egui::vec2(radians.cos(), radians.sin()) * 46.0;
-        if let Some(previous) = previous {
-            painter.line_segment(
-                [previous, point],
-                egui::Stroke::new(3.0_f32, egui::Color32::from_white_alpha(68)),
-            );
-        }
-        previous = Some(point);
-    }
-
-    let radians = angle.to_radians();
-    let needle = center + egui::vec2(radians.cos(), radians.sin()) * 42.0;
-    painter.line_segment(
-        [center, needle],
-        egui::Stroke::new(4.0_f32, egui::Color32::WHITE),
-    );
-    painter.circle_filled(center, 5.0, forza_pink());
-    painter.text(
-        rect.left_bottom() + egui::vec2(20.0, -20.0),
-        egui::Align2::CENTER_CENTER,
-        format!("{:.0}", min_display.abs()),
-        egui::FontId::proportional(14.0),
+    painter.image(
+        background.id(),
+        rect,
+        egui::Rect::from_min_max(egui::Pos2::ZERO, egui::pos2(1.0, 1.0)),
         egui::Color32::WHITE,
     );
+
+    gauge_arc(
+        painter,
+        center,
+        48.0,
+        -135.0,
+        -5.0,
+        egui::Color32::from_white_alpha(68),
+    );
+    gauge_arc(painter, center, 48.0, -5.0, 35.0, forza_pink());
+
+    let radians = (angle - 90.0).to_radians();
+    let direction = egui::vec2(radians.cos(), radians.sin());
+    let perpendicular = egui::vec2(-direction.y, direction.x);
+    let base_left = center - perpendicular * 2.68;
+    let base_right = center + perpendicular * 2.68;
+    let tip_center = center + direction * 48.42;
+    let tip_left = tip_center - perpendicular * 1.68;
+    let tip_right = tip_center + perpendicular * 1.68;
+    let mut needle = egui::Mesh::default();
+    let base_color = egui::Color32::TRANSPARENT;
+    let tip_color = egui::Color32::WHITE;
+    needle.colored_vertex(base_left, base_color);
+    needle.colored_vertex(base_right, base_color);
+    needle.colored_vertex(tip_right, tip_color);
+    needle.colored_vertex(tip_left, tip_color);
+    needle.add_triangle(0, 1, 2);
+    needle.add_triangle(0, 2, 3);
+    painter.add(egui::Shape::mesh(needle));
     painter.text(
-        rect.right_top() + egui::vec2(-31.0, 20.0),
-        egui::Align2::CENTER_CENTER,
+        rect.left_bottom() + egui::vec2(23.0, -20.0),
+        egui::Align2::LEFT_BOTTOM,
+        format!("{min_display:.0}"),
+        forza_font(14.0, true),
+        egui::Color32::from_white_alpha(68),
+    );
+    painter.text(
+        rect.right_top() + egui::vec2(-31.0, 13.0),
+        egui::Align2::RIGHT_TOP,
         format!("{max_display:.0}"),
-        egui::FontId::proportional(14.0),
-        egui::Color32::WHITE,
+        forza_font(14.0, true),
+        forza_pink(),
     );
+    painter.text(
+        rect.left_top() + egui::vec2(13.0, 36.0),
+        egui::Align2::LEFT_TOP,
+        "0",
+        forza_font(14.0, true),
+        egui::Color32::from_white_alpha(68),
+    );
+}
+
+fn gauge_arc(
+    painter: &egui::Painter,
+    center: egui::Pos2,
+    radius: f32,
+    from: f32,
+    to: f32,
+    color: egui::Color32,
+) {
+    let points = (0..=32)
+        .map(|step| {
+            let angle = from + (to - from) * step as f32 / 32.0;
+            let radians = (angle - 90.0).to_radians();
+            center + egui::vec2(radians.cos(), radians.sin()) * radius
+        })
+        .collect();
+    painter.add(egui::Shape::line(points, egui::Stroke::new(3.2_f32, color)));
 }
 
 fn boost_needle_angle(boost: f32, min_display: f32, max_display: f32) -> f32 {
@@ -709,7 +886,7 @@ fn boost_needle_angle(boost: f32, min_display: f32, max_display: f32) -> f32 {
     angle.clamp(-135.0, 35.0)
 }
 
-fn fuel_and_oil(ui: &mut egui::Ui, life: &LifeSnapshot) {
+fn fuel_and_oil(painter: &egui::Painter, hud: egui::Rect, life: &LifeSnapshot, is_electric: bool) {
     let fuel = life.fuel_percent.clamp(0.0, 1.0);
     let fuel_color = if fuel <= 0.0 {
         egui::Color32::from_rgb(221, 0, 0)
@@ -718,27 +895,45 @@ fn fuel_and_oil(ui: &mut egui::Ui, life: &LifeSnapshot) {
     } else {
         egui::Color32::from_white_alpha(128)
     };
-    ui.horizontal(|ui| {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(78.0, 15.0), egui::Sense::hover());
-        let painter = ui.painter_at(rect);
-        painter.rect_filled(rect, 2.0, egui::Color32::from_gray(60));
-        let fill =
-            egui::Rect::from_min_size(rect.min, egui::vec2(rect.width() * fuel, rect.height()));
-        painter.rect_filled(fill, 2.0, fuel_color);
-        ui.label(
-            egui::RichText::new(format!("{:.0}%", fuel * 100.0))
-                .size(13.0)
-                .strong()
-                .color(fuel_color),
+    painter.text(
+        hud.min + egui::vec2(337.0, -2.0),
+        egui::Align2::LEFT_TOP,
+        if is_electric { "⚡" } else { "⛽" },
+        egui::FontId::proportional(27.0),
+        fuel_color,
+    );
+    painter.line(
+        vec![
+            hud.min + egui::vec2(378.0, 88.0),
+            hud.min + egui::vec2(371.0, 88.0),
+            hud.min + egui::vec2(371.0, 1.0),
+            hud.min + egui::vec2(378.0, 1.0),
+        ],
+        egui::Stroke::new(
+            2.0_f32,
+            egui::Color32::from_rgba_unmultiplied(128, 128, 128, 221),
+        ),
+    );
+    let bar = egui::Rect::from_min_size(hud.min + egui::vec2(374.0, 3.0), egui::vec2(6.0, 82.0));
+    painter.rect_filled(
+        bar,
+        0.0,
+        egui::Color32::from_rgba_unmultiplied(128, 128, 128, 68),
+    );
+    let fill = egui::Rect::from_min_max(
+        egui::pos2(bar.left(), bar.bottom() - bar.height() * fuel),
+        bar.right_bottom(),
+    );
+    painter.rect_filled(fill, 0.0, fuel_color);
+    if life.oil_remaining_m <= 0.0 && !is_electric {
+        painter.text(
+            hud.min + egui::vec2(84.0, 216.0),
+            egui::Align2::LEFT_TOP,
+            "◆",
+            egui::FontId::proportional(48.0),
+            egui::Color32::from_rgb(221, 0, 0),
         );
-        if life.oil_remaining_m <= 0.0 {
-            ui.label(
-                egui::RichText::new("◆ OIL")
-                    .strong()
-                    .color(egui::Color32::from_rgb(221, 0, 0)),
-            );
-        }
-    });
+    }
 }
 
 fn render_navigation_hud(
@@ -752,14 +947,9 @@ fn render_navigation_hud(
         return;
     };
     egui::Area::new(egui::Id::new("forzalife-navigation"))
-        .fixed_pos([32.0, (screen_size[1] - 180.0).max(0.0)])
+        .fixed_pos([240.0, (screen_size[1] - 358.0).max(0.0)])
         .show(context, |ui| {
-            egui::Frame::new()
-                .fill(egui::Color32::from_black_alpha(221))
-                .inner_margin(egui::Margin::symmetric(15, 10))
-                .show(ui, |ui| {
-                    navigation(ui, telemetry, location.position, distance)
-                });
+            navigation(ui, telemetry, location.position, distance, target);
         });
 }
 
@@ -780,6 +970,7 @@ fn spawn_receiver(
             }
         };
         let mut last_save = Instant::now();
+        let mut last_refuel_sample: Option<(i32, u32)> = None;
         let mut packet = [0_u8; PACKET_SIZE + 1];
         loop {
             match socket.recv(&mut packet) {
@@ -795,12 +986,29 @@ fn spawn_receiver(
                         let mut life = simulation.update_with_capacity(&telemetry, tank_liters);
                         if telemetry.speed_mps.abs() < 1.0 {
                             let locations = locations.read().unwrap();
-                            if locations
+                            let at_gas = locations
                                 .nearest(LocationKind::Gas, telemetry.position)
-                                .is_some_and(|(_, distance)| distance <= 25.0)
-                            {
-                                simulation.refuel(telemetry.car_ordinal);
-                                life = simulation.update_with_capacity(&telemetry, tank_liters);
+                                .is_some_and(|(_, distance)| distance <= 25.0);
+                            if at_gas {
+                                let elapsed_s = last_refuel_sample
+                                    .filter(|(car, _)| *car == telemetry.car_ordinal)
+                                    .map(|(_, timestamp)| {
+                                        telemetry.timestamp_ms.wrapping_sub(timestamp) as f32
+                                            / 1_000.0
+                                    })
+                                    .filter(|elapsed| (0.0..=1.0).contains(elapsed))
+                                    .unwrap_or_default();
+                                simulation.refuel(
+                                    telemetry.car_ordinal,
+                                    REFUEL_LITERS_PER_SECOND * elapsed_s,
+                                );
+                                life = simulation
+                                    .current(telemetry.car_ordinal)
+                                    .expect("updated vehicle state");
+                                last_refuel_sample =
+                                    Some((telemetry.car_ordinal, telemetry.timestamp_ms));
+                            } else {
+                                last_refuel_sample = None;
                             }
                             if locations
                                 .nearest(LocationKind::Workshop, telemetry.position)
@@ -809,6 +1017,8 @@ fn spawn_receiver(
                                 simulation.service_oil(telemetry.car_ordinal);
                                 life = simulation.update_with_capacity(&telemetry, tank_liters);
                             }
+                        } else {
+                            last_refuel_sample = None;
                         }
                         if last_save.elapsed() >= Duration::from_secs(5) {
                             if let Err(error) = simulation.save(&state_path) {
@@ -835,47 +1045,60 @@ fn spawn_receiver(
     });
 }
 
-fn navigation(ui: &mut egui::Ui, telemetry: &Telemetry, target_position: [f32; 3], distance: f32) {
-    ui.horizontal(|ui| {
-        let (rect, _) = ui.allocate_exact_size(egui::vec2(56.0, 56.0), egui::Sense::hover());
-        let painter = ui.painter_at(rect);
-        let angle = (target_position[0] - telemetry.position[0])
-            .atan2(target_position[2] - telemetry.position[2])
-            - telemetry.yaw;
-        let direction = egui::vec2(angle.sin(), -angle.cos());
-        let right = egui::vec2(-direction.y, direction.x);
-        painter.add(egui::Shape::convex_polygon(
-            vec![
-                rect.center() + direction * 24.0,
-                rect.center() - direction * 14.0 + right * 11.0,
-                rect.center() - direction * 8.0,
-                rect.center() - direction * 14.0 - right * 11.0,
-            ],
-            egui::Color32::WHITE,
-            egui::Stroke::NONE,
-        ));
-        ui.add_space(12.0);
-        ui.vertical(|ui| {
-            let (value, unit) = if distance >= 1_000.0 {
-                (format!("{:.1}", distance / 1_000.0), "KM")
-            } else {
-                (format!("{distance:.0}"), "M")
-            };
-            ui.label(
-                egui::RichText::new(value)
-                    .size(28.0)
-                    .strong()
-                    .italics()
-                    .color(egui::Color32::WHITE),
-            );
-            ui.label(
-                egui::RichText::new(unit)
-                    .size(12.0)
-                    .strong()
-                    .color(egui::Color32::from_white_alpha(128)),
-            );
-        });
-    });
+fn navigation(
+    ui: &mut egui::Ui,
+    telemetry: &Telemetry,
+    target_position: [f32; 3],
+    distance: f32,
+    target: LocationKind,
+) {
+    let (rect, _) = ui.allocate_exact_size(egui::vec2(66.0, 67.0), egui::Sense::hover());
+    let painter = ui.painter();
+    let arrow_rect = egui::Rect::from_min_size(rect.min, egui::vec2(58.0, 58.0));
+    let center = arrow_rect.center();
+    painter.circle_stroke(
+        center,
+        27.0,
+        egui::Stroke::new(4.0_f32, egui::Color32::from_white_alpha(17)),
+    );
+    let angle = (target_position[0] - telemetry.position[0])
+        .atan2(target_position[2] - telemetry.position[2])
+        - telemetry.yaw;
+    let direction = egui::vec2(angle.sin(), -angle.cos());
+    let right = egui::vec2(-direction.y, direction.x);
+    painter.add(egui::Shape::convex_polygon(
+        vec![
+            center + direction * 15.0,
+            center - direction * 10.0 + right * 10.0,
+            center - direction * 6.5,
+            center - direction * 10.0 - right * 9.0,
+        ],
+        egui::Color32::WHITE,
+        egui::Stroke::new(2.0_f32, egui::Color32::from_rgb(29, 29, 27)),
+    ));
+    let (value, unit) = if distance >= 1_000.0 {
+        (format!("{:.1}", distance / 1_000.0), " KM")
+    } else {
+        (format!("{distance:.0}"), " M")
+    };
+    painter.text(
+        rect.min + egui::vec2(29.0, -16.0),
+        egui::Align2::CENTER_TOP,
+        format!("{value}{unit}"),
+        forza_font(20.0, true),
+        egui::Color32::WHITE,
+    );
+    painter.text(
+        rect.min + egui::vec2(40.0, 41.0),
+        egui::Align2::LEFT_TOP,
+        match target {
+            LocationKind::Gas => "⛽",
+            LocationKind::Workshop => "🔧",
+            LocationKind::ConvenienceStore => "●",
+        },
+        egui::FontId::proportional(18.0),
+        egui::Color32::from_white_alpha(128),
+    );
 }
 
 fn screen_size() -> Result<[f32; 2], Box<dyn std::error::Error>> {
@@ -1011,7 +1234,8 @@ fn locations_path() -> PathBuf {
 
 #[cfg(test)]
 mod tests {
-    use super::{BoostGaugeState, boost_needle_angle};
+    use super::{BoostGaugeState, boost_needle_angle, hud_rect, menu_rect, vehicle_card_rect};
+    use eframe::egui;
 
     #[test]
     fn boost_needle_matches_the_windows_gauge_endpoints() {
@@ -1030,5 +1254,21 @@ mod tests {
         boost.update_value(2, 0.0);
         assert_eq!(boost.max_display, 1);
         assert!(!boost.visible);
+    }
+
+    #[test]
+    fn windows_layout_uses_the_original_1080p_anchors() {
+        assert_eq!(
+            menu_rect([1920.0, 1080.0]),
+            egui::Rect::from_min_size(egui::pos2(20.0, 430.0), egui::vec2(290.0, 220.0),)
+        );
+        assert_eq!(
+            vehicle_card_rect([1920.0, 1080.0]),
+            egui::Rect::from_min_size(egui::pos2(585.0, 300.0), egui::vec2(750.0, 480.0),)
+        );
+        assert_eq!(
+            hud_rect([1920.0, 1080.0]),
+            egui::Rect::from_min_size(egui::pos2(1518.0, 787.0), egui::vec2(400.0, 291.0),)
+        );
     }
 }

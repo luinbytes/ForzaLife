@@ -19,4 +19,9 @@ fn bundled_car_database_matches_the_windows_vehicle_metadata() {
         forzalife::car::CarInfo::fallback_tank_capacity_liters(6),
         65.0
     );
+
+    let porsche = cars.get(641).expect("Porsche 911 GT1");
+    assert_eq!(porsche.fuel_capacity_liters, 100.0);
+    assert_eq!(porsche.tank_capacity_liters(6), 65.0);
+    assert_eq!(porsche.tank_capacity_liters(0), 100.0);
 }
