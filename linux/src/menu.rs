@@ -7,13 +7,28 @@ pub enum MenuPage {
     Main,
     Navigation,
     VehicleCard,
+    OdometerInput,
+    FuelInput,
 }
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 pub enum MenuEffect {
     None,
+    ReloadOverlay,
     ToggleUsage,
+    OpenOdometerInput,
+    OpenFuelInput,
     SetNavigation(Option<LocationKind>),
+    CycleHudMode,
+    ResetSession,
+}
+
+#[derive(Clone, Copy, Debug, Default, PartialEq, Eq)]
+pub enum HudMode {
+    #[default]
+    Life,
+    Drive,
+    Minimal,
 }
 
 #[derive(Default)]
@@ -43,13 +58,24 @@ impl MenuState {
         self.page = MenuPage::Closed;
     }
 
+    pub fn back(&mut self) {
+        match self.page {
+            MenuPage::Closed => {}
+            MenuPage::Main => self.close(),
+            MenuPage::Navigation
+            | MenuPage::VehicleCard
+            | MenuPage::OdometerInput
+            | MenuPage::FuelInput => self.open(MenuPage::Main),
+        }
+    }
+
     pub fn primary(&mut self) -> MenuEffect {
         match self.page {
             MenuPage::Closed => {
                 self.open(MenuPage::Main);
                 MenuEffect::None
             }
-            MenuPage::VehicleCard => {
+            MenuPage::VehicleCard | MenuPage::OdometerInput | MenuPage::FuelInput => {
                 self.close();
                 MenuEffect::None
             }
@@ -66,9 +92,29 @@ impl MenuState {
                     self.close();
                     MenuEffect::ToggleUsage
                 }
+                3 => {
+                    self.open(MenuPage::OdometerInput);
+                    MenuEffect::OpenOdometerInput
+                }
                 4 => {
+                    self.open(MenuPage::FuelInput);
+                    MenuEffect::OpenFuelInput
+                }
+                5 => {
+                    self.close();
+                    MenuEffect::ResetSession
+                }
+                6 => {
+                    self.close();
+                    MenuEffect::CycleHudMode
+                }
+                7 => {
                     self.close();
                     MenuEffect::None
+                }
+                8 => {
+                    self.close();
+                    MenuEffect::ReloadOverlay
                 }
                 _ => MenuEffect::None,
             },
@@ -101,9 +147,12 @@ impl MenuState {
 
     fn move_selection(&mut self, direction: i32) {
         let enabled: &[usize] = match self.page {
-            MenuPage::Main => &[0, 1, 2, 4],
+            MenuPage::Main => &[0, 1, 2, 3, 4, 5, 6, 7, 8],
             MenuPage::Navigation => &[0, 1, 2, 3],
-            MenuPage::Closed | MenuPage::VehicleCard => return,
+            MenuPage::Closed
+            | MenuPage::VehicleCard
+            | MenuPage::OdometerInput
+            | MenuPage::FuelInput => return,
         };
         let position = enabled
             .iter()

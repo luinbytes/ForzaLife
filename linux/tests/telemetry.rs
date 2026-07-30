@@ -28,9 +28,11 @@ fn parses_the_documented_fh6_packet_layout() {
     put_f32(&mut packet, 252, 99.25);
     put_f32(&mut packet, 256, 27.0);
     put_f32(&mut packet, 260, 123_000.0);
+    put_f32(&mut packet, 264, 420.0);
     put_f32(&mut packet, 284, 8.25);
     put_f32(&mut packet, 288, 0.75);
     put_f32(&mut packet, 292, 12_345.0);
+    packet[314] = 3;
     packet[315] = 200;
     packet[319] = 4;
 
@@ -43,6 +45,8 @@ fn parses_the_documented_fh6_packet_layout() {
     assert_eq!(parsed.current_engine_rpm, 4_250.0);
     assert_eq!(parsed.yaw, 1.25);
     assert_eq!(parsed.power_w, 123_000.0);
+    assert_eq!(parsed.torque_nm, 420.0);
+    assert_eq!(parsed.race_position, 3);
     assert_eq!(parsed.throttle, 200);
     assert_eq!(parsed.car_ordinal, 1337);
     assert_eq!(parsed.num_cylinders, 6);

@@ -15,3 +15,12 @@ Use the default Matt Pocock triage vocabulary. See `docs/agents/triage-labels.md
 ### Domain docs
 
 This is a single-context repository. See `docs/agents/domain.md`.
+
+
+<claude-mem-context>
+# Memory Context
+
+# $CMEM ForzaLife 2026-07-30 6:28pm GMT+1
+
+No previous sessions found.
+</claude-mem-context>

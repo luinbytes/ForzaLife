@@ -1,6 +1,10 @@
 pub mod car;
+pub mod driving;
+pub mod input_proxy;
 pub mod locations;
+pub mod malfunctions;
 pub mod menu;
 pub mod model;
 pub mod overlay;
 pub mod telemetry;
+mod wayland_overlay;

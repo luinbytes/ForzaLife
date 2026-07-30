@@ -71,16 +71,7 @@ fn session(command: &[String]) -> Result<u8, Box<dyn std::error::Error>> {
     let (program, arguments) = command
         .split_first()
         .ok_or("session requires a game command")?;
-    let executable = env::current_exe()?;
     let mut game = Command::new(program).args(arguments).spawn()?;
-    let mut overlay = match Command::new(executable).arg("overlay").spawn() {
-        Ok(overlay) => overlay,
-        Err(error) => {
-            terminate(&mut game);
-            let _ = game.wait();
-            return Err(error.into());
-        }
-    };
     let stopping = Arc::new(AtomicBool::new(false));
     ctrlc::set_handler({
         let stopping = Arc::clone(&stopping);
@@ -97,8 +88,6 @@ fn session(command: &[String]) -> Result<u8, Box<dyn std::error::Error>> {
         }
         thread::sleep(Duration::from_millis(100));
     };
-    terminate(&mut overlay);
-    let _ = overlay.wait();
     Ok(u8::try_from(exit).unwrap_or(1))
 }
 
@@ -114,6 +103,6 @@ fn print_help() {
          Usage:\n  \
          forzalife overlay [PORT]       Run the overlay (default UDP port: 8080)\n  \
          forzalife probe [PORT]         Print one validated FH6 packet\n  \
-         forzalife session COMMAND...   Run overlay for the lifetime of COMMAND"
+         forzalife session COMMAND...   Run COMMAND; watcher owns the overlay"
     );
 }

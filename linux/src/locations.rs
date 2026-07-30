@@ -1,22 +1,18 @@
-use serde::{Deserialize, Serialize};
-use std::{fs, io, path::Path};
-
-#[derive(Clone, Copy, Debug, PartialEq, Serialize, Deserialize)]
-#[serde(rename_all = "lowercase")]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub enum LocationKind {
     Gas,
     Workshop,
     ConvenienceStore,
 }
 
-#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Location {
     pub name: String,
     pub kind: LocationKind,
     pub position: [f32; 3],
 }
 
-#[derive(Clone, Debug, Default, Serialize, Deserialize)]
+#[derive(Clone, Debug)]
 pub struct Locations {
     pub locations: Vec<Location>,
 }
@@ -60,54 +56,6 @@ impl Locations {
             .filter(|location| location.kind == kind)
             .map(|location| (location, distance(location.position, position)))
             .min_by(|left, right| left.1.total_cmp(&right.1))
-    }
-
-    pub fn add(&mut self, kind: LocationKind, position: [f32; 3]) {
-        let number = self
-            .locations
-            .iter()
-            .filter(|location| location.kind == kind)
-            .count()
-            + 1;
-        let label = match kind {
-            LocationKind::Gas => "Gas station",
-            LocationKind::Workshop => "Workshop",
-            LocationKind::ConvenienceStore => "Konbini",
-        };
-        self.locations.push(Location {
-            name: format!("{label} {number}"),
-            kind,
-            position,
-        });
-    }
-
-    pub fn load(path: &Path) -> Self {
-        let mut bundled = Self::bundled();
-        let custom: Self = fs::read(path)
-            .ok()
-            .and_then(|bytes| serde_json::from_slice(&bytes).ok())
-            .unwrap_or_default();
-        bundled.locations.extend(custom.locations);
-        bundled
-    }
-
-    pub fn save(&self, path: &Path) -> io::Result<()> {
-        if let Some(parent) = path.parent() {
-            fs::create_dir_all(parent)?;
-        }
-        let bundled = Self::bundled();
-        let locations = self
-            .locations
-            .strip_prefix(bundled.locations.as_slice())
-            .unwrap_or(&self.locations);
-        let temporary = path.with_extension("json.tmp");
-        fs::write(
-            &temporary,
-            serde_json::to_vec_pretty(&Self {
-                locations: locations.to_vec(),
-            })?,
-        )?;
-        fs::rename(temporary, path)
     }
 }
 

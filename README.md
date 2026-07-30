@@ -15,15 +15,17 @@ cargo build --release --locked
 install -Dm755 target/release/forzalife ~/.local/bin/forzalife
 ```
 
-Put the session wrapper inside gamescope in the game's Steam launch options. For example:
+Keep the Steam launch option as gamescope only. The enabled `forzalife.service` watcher starts exactly one overlay when FH6 appears:
 
 ```sh
-gamescope -f -r 144 -w 1920 -h 1080 -- ~/.local/bin/forzalife session %command%
+gamescope -f -r 144 -w 1920 -h 1080 -- %command%
 ```
+
+Do not add `forzalife session` to the launch option, or it will compete with the watcher.
 
 Then enable Data Out in FH6 with IP `127.0.0.1` and port `8080`. Set another port by placing `FORZALIFE_PORT=9000` before `gamescope`.
 
-The Linux HUD shows live speed and boost, persistent per-car fuel, odometer and oil state, plus service navigation using the Windows release's bundled world map. Press `L` to open or execute the selected menu option, `'` to move up, and `;` to move down. The menu includes mini navigation, the vehicle info card, and per-car fuel-usage pause. Stopping within 25 m of a gas station or workshop refuels or services the current car. It does not read memory from or modify FH6. See [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for Linux overlay setup notes.
+The Linux HUD shows boost with a PSI readout, persistent per-car fuel, odometer, average MPG and km/L, and oil state, plus service navigation using the Windows release's bundled world map. It also provides a driving HUD with speed, gear, RPM, shift stages, throttle, race position, session distance, and Life, Drive, and Minimal modes. Use the arrow keys: Right opens/selects, Up and Down navigate, and Left goes back. Enter confirms numeric input and Escape cancels it. The menu includes mini navigation, the vehicle info card, manual odometer sync, manual fuel level for testing, per-car fuel-usage pause, driving-session reset, HUD mode cycling, and a `Reload overlay` action that reloads the overlay without restarting Forza. Stop within 25 m of a gas station and hold Enter or controller B to refuel gradually with visible progress; a workshop services its oil. Running out of fuel pulse-limits keyboard `W` and the controller right trigger during free roam while forwarding every other input unchanged. The input proxy requires read access to `/dev/input/event*` and write access to `/dev/uinput`; device grabs are released automatically when ForzaLife exits. It does not read memory from or modify FH6. See [`docs/research/linux-overlay.md`](docs/research/linux-overlay.md) for Linux overlay setup notes.
 
 ## Hello
 

@@ -1,11 +1,26 @@
-use forzalife::locations::{LocationKind, Locations};
+use forzalife::locations::{Location, LocationKind, Locations};
 
 #[test]
 fn nearest_service_location_is_selected_by_world_distance() {
-    let mut locations = Locations::default();
-    locations.add(LocationKind::Gas, [100.0, 0.0, 0.0]);
-    locations.add(LocationKind::Gas, [20.0, 0.0, 0.0]);
-    locations.add(LocationKind::Workshop, [1.0, 0.0, 0.0]);
+    let locations = Locations {
+        locations: vec![
+            Location {
+                name: "Gas station 1".to_owned(),
+                kind: LocationKind::Gas,
+                position: [100.0, 0.0, 0.0],
+            },
+            Location {
+                name: "Gas station 2".to_owned(),
+                kind: LocationKind::Gas,
+                position: [20.0, 0.0, 0.0],
+            },
+            Location {
+                name: "Workshop 1".to_owned(),
+                kind: LocationKind::Workshop,
+                position: [1.0, 0.0, 0.0],
+            },
+        ],
+    };
 
     let (nearest, distance) = locations
         .nearest(LocationKind::Gas, [0.0; 3])
@@ -44,16 +59,4 @@ fn bundled_world_map_matches_the_windows_points_of_interest() {
             .count(),
         37
     );
-}
-
-#[test]
-fn saving_does_not_duplicate_the_bundled_world_map() {
-    let path =
-        std::env::temp_dir().join(format!("forzalife-locations-{}.json", std::process::id()));
-    let locations = Locations::load(&path);
-    locations.save(&path).expect("save locations");
-    let reloaded = Locations::load(&path);
-    std::fs::remove_file(path).expect("remove test locations");
-
-    assert_eq!(reloaded.locations.len(), 118);
 }
